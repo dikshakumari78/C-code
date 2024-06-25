@@ -1,0 +1,28 @@
+#include <iostream>
+
+using namespace std;
+
+int main() {
+    // Dynamically allocate memory for an integer
+    int* ptr = new int;
+
+    // Check if memory allocation was successful
+    if (ptr == nullptr) {
+        cout << "Failed to allocate memory!" << endl;
+        return 1; // Exit the program with an error code
+    }
+
+    // Assign a value to the allocated memory
+    *ptr = 42;
+
+    // Print the value stored in the allocated memory
+    cout << "Value stored in dynamically allocated memory: " << *ptr << endl;
+
+    // Free the dynamically allocated memory
+    delete ptr;
+
+    // Set pointer to nullptr after memory is freed (optional but good practice)
+    ptr = nullptr;
+
+    return 0;
+}
