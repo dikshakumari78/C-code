@@ -1,0 +1,39 @@
+#include <iostream>
+
+using namespace std;
+
+class Box {
+private:
+    double length;
+    double width;
+    double height;
+
+public:
+    // Constructor to initialize dimensions of the box
+    Box(double l, double w, double h) {
+        length = l;
+        width = w;
+        height = h;
+    }
+
+    // Method to calculate and return the volume of the box
+    double volume() {
+        return length * width * height;
+    }
+};
+
+int main() {
+    // Create an object of the Box class
+    Box box1(3.0, 4.0, 5.0);
+
+    // Create a reference to the object box1
+    Box& refBox = box1;
+
+    // Call the volume method using the reference
+    double vol = refBox.volume();
+
+    // Display the volume of the box
+    cout << "Volume of the box: " << vol << endl;
+
+    return 0;
+}
