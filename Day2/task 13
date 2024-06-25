@@ -1,0 +1,21 @@
+#include <iostream>
+
+// Function that adds 10 to an integer passed by value
+void addTen(int num) {
+    num += 10;
+}
+
+int main() {
+    int originalValue = 5;
+
+    // Print original value
+    std::cout << "Original value before function call: " << originalValue << std::endl;
+
+    // Call function addTen with originalValue
+    addTen(originalValue);
+
+    // Print original value again after function call
+    std::cout << "Original value after function call: " << originalValue << std::endl;
+
+    return 0;
+}
