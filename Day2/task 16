@@ -1,0 +1,71 @@
+#include <iostream>
+#include <string>
+
+// Employee class definition
+class Employee {
+private:
+    std::string name;
+    double salary;
+
+public:
+    // Constructor
+    Employee(std::string n, double s) : name(n), salary(s) {}
+
+    // Getter for name
+    std::string getName() const {
+        return name;
+    }
+
+    // Getter for salary
+    double getSalary() const {
+        return salary;
+    }
+
+    // Function to increase salary (passed by value)
+    void increaseSalaryByValue(double amount) {
+        salary += amount;
+    }
+
+    // Function to increase salary (passed by reference)
+    void increaseSalaryByReference(double amount) {
+        salary += amount;
+    }
+};
+
+// Function to demonstrate passing by value
+void modifyEmployeeByValue(Employee emp) {
+    emp.increaseSalaryByValue(1000); // Increase salary by 1000
+}
+
+// Function to demonstrate passing by reference
+void modifyEmployeeByReference(Employee &emp) {
+    emp.increaseSalaryByReference(2000); // Increase salary by 2000
+}
+
+int main() {
+    // Create an Employee object
+    Employee emp1("John Doe", 50000.0);
+
+    // Print initial details
+    std::cout << "Employee Details:" << std::endl;
+    std::cout << "Name: " << emp1.getName() << std::endl;
+    std::cout << "Salary: $" << emp1.getSalary() << std::endl;
+
+    // Demonstrate passing by value
+    modifyEmployeeByValue(emp1);
+
+    // Print details after passing by value
+    std::cout << "\nAfter passing by value:" << std::endl;
+    std::cout << "Name: " << emp1.getName() << std::endl;
+    std::cout << "Salary: $" << emp1.getSalary() << std::endl;
+
+    // Demonstrate passing by reference
+    modifyEmployeeByReference(emp1);
+
+    // Print details after passing by reference
+    std::cout << "\nAfter passing by reference:" << std::endl;
+    std::cout << "Name: " << emp1.getName() << std::endl;
+    std::cout << "Salary: $" << emp1.getSalary() << std::endl;
+
+    return 0;
+}
