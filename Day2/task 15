@@ -1,0 +1,27 @@
+#include <iostream>
+
+// Function that returns a reference to a static variable
+int& staticVariable() {
+    static int value = 10; // Static variable initialization
+    return value;
+}
+
+int main() {
+    // Call the function and get a reference to the static variable
+    int &ref = staticVariable();
+
+    // Print the initial value of the static variable
+    std::cout << "Initial value of static variable: " << ref << std::endl;
+
+    // Modify the value through the reference
+    ref = 25;
+
+    // Print the modified value
+    std::cout << "Modified value of static variable: " << ref << std::endl;
+
+    // Demonstrate accessing the static variable again through the function
+    int &ref2 = staticVariable();
+    std::cout << "Value of static variable after modification: " << ref2 << std::endl;
+
+    return 0;
+}
