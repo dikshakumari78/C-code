@@ -1,0 +1,22 @@
+#include <iostream>
+
+using namespace std;
+
+// Function to increment the value pointed to by ptr
+void increment(int* ptr) {
+    (*ptr)++;  // Increment the value pointed to by ptr
+}
+
+int main() {
+    int num = 5;
+    int* ptr = &num;  // Pointer to integer num
+
+    cout << "Before increment: " << num << endl;
+
+    // Call the increment function with the pointer
+    increment(ptr);
+
+    cout << "After increment: " << num << endl;
+
+    return 0;
+}
