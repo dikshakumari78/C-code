@@ -1,0 +1,49 @@
+#include <iostream>
+
+// Function to find and return a reference to the largest element in an array
+int& findLargest(int arr[], int size) {
+    if (size == 0) {
+        // Handle empty array case
+        throw std::invalid_argument("Array is empty");
+    }
+
+    int maxIndex = 0;
+
+    // Find index of the largest element
+    for (int i = 1; i < size; ++i) {
+        if (arr[i] > arr[maxIndex]) {
+            maxIndex = i;
+        }
+    }
+
+    // Return reference to the largest element
+    return arr[maxIndex];
+}
+
+int main() {
+    int arr[] = {12, 45, 23, 6, 67, 3, 90};
+    int size = sizeof(arr) / sizeof(arr[0]);
+
+    try {
+        // Get reference to the largest element
+        int &largest = findLargest(arr, size);
+
+        // Print the largest element using the reference
+        std::cout << "The largest element in the array is: " << largest << std::endl;
+
+        // Modify the largest element through the reference
+        largest = 1000;
+
+        // Print modified array
+        std::cout << "Array after modifying the largest element:" << std::endl;
+        for (int i = 0; i < size; ++i) {
+            std::cout << arr[i] << " ";
+        }
+        std::cout << std::endl;
+    }
+    catch (const std::invalid_argument& e) {
+        std::cerr << "Invalid argument: " << e.what() << std::endl;
+    }
+
+    return 0;
+}
