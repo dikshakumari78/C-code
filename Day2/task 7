@@ -1,0 +1,25 @@
+#include <iostream>
+
+using namespace std;
+
+int main() {
+    const int SIZE = 5;
+    int values[SIZE] = {10, 20, 30, 40, 50};  // Array of integers
+
+    // Array of pointers to integers
+    int* ptrArray[SIZE];
+
+    // Assign each element of ptrArray to point to corresponding element in values array
+    for (int i = 0; i < SIZE; ++i) {
+        ptrArray[i] = &values[i];
+    }
+
+    // Print values using pointers
+    cout << "Values in the array accessed through pointers:" << endl;
+    for (int i = 0; i < SIZE; ++i) {
+        cout << *ptrArray[i] << " ";
+    }
+    cout << endl;
+
+    return 0;
+}
