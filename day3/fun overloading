@@ -1,0 +1,51 @@
+#include <iostream>
+using namespace std;
+
+class cal {
+public:
+    static int add(int a, int b) {
+        return a + b;
+    }
+
+    static int add(int a, int b, int c) {
+        return a + b + c;
+    }
+
+    static int multiply(int a, int b) {
+        return a * b;
+    }
+
+    static int subtract(int a, int b) {
+        return a - b;
+    }
+
+    static int divide(int a, int b) {
+        if (b != 0) {
+            return a / b;
+        } else {
+            cerr << "Error: Division by zero" << endl;
+            return 0; 
+        }
+    }
+};
+
+int main() {
+    cal C;
+
+    
+    cout << "Addition 1: " << C.add(10, 20) << endl;
+    cout << "Addition 2: " << C.add(12, 20, 23) << endl;
+
+    
+    cout << "Multiplication: " << C.multiply(5, 6) << endl;
+
+   
+    cout << "Subtraction: " << C.subtract(30, 12) << endl;
+
+    
+    cout << "Division: " << C.divide(100, 5) << endl;
+    cout << "Division by zero: ";
+    cout << C.divide(10, 0) << endl;
+
+    return 0;
+}
