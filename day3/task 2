@@ -1,0 +1,86 @@
+#include <string>
+#include <vector>
+
+class Person {
+protected:
+    std::string name;
+    int id;
+
+public:
+    Person(const std::string& name, int id)
+        : name(name), id(id) {}
+
+    // Getters for name and id
+    std::string getName() const { return name; }
+    int getId() const { return id; }
+
+    // Virtual destructor to allow proper cleanup in derived classes
+    virtual ~Person() = default;
+};
+#include <iostream>
+
+class Student : public Person {
+private:
+    std::string major;
+    double gpa;
+
+public:
+    Student(const std::string& name, int id, const std::string& major)
+        : Person(name, id), major(major), gpa(0.0) {}
+
+    // Method to calculate semester GPA
+    double calculateSemesterGPA(const std::vector<double>& grades) {
+        if (grades.empty()) return 0.0;
+        
+        double sum = 0.0;
+        for (double grade : grades) {
+            sum += grade;
+        }
+        gpa = sum / grades.size();
+        return gpa;
+    }
+
+    // Getter for major
+    std::string getMajor() const { return major; }
+
+    // Getter for GPA
+    double getGPA() const { return gpa; }
+};
+class Faculty : public Person {
+private:
+    std::string department;
+    std::string title;
+
+public:
+    Faculty(const std::string& name, int id, const std::string& department, const std::string& title)
+        : Person(name, id), department(department), title(title) {}
+
+    // Method to simulate teaching a course
+    void teachCourse(const std::string& courseName) {
+        std::cout << name << " is teaching " << courseName << std::endl;
+    }
+
+    // Getter for department
+    std::string getDepartment() const { return department; }
+
+    // Getter for title
+    std::string getTitle() const { return title; }
+};
+int main() {
+    Student student("Alice", 1, "Computer Science");
+    student.calculateSemesterGPA({3.7, 3.9, 4.0});
+    std::cout << "Student Name: " << student.getName() << std::endl;
+    std::cout << "Student ID: " << student.getId() << std::endl;
+    std::cout << "Major: " << student.getMajor() << std::endl;
+    std::cout << "GPA: " << student.getGPA() << std::endl;
+
+    Faculty faculty("Dr. Smith", 101, "Computer Science", "Professor");
+    faculty.teachCourse("Introduction to Programming");
+
+    std::cout << "Faculty Name: " << faculty.getName() << std::endl;
+    std::cout << "Faculty ID: " << faculty.getId() << std::endl;
+    std::cout << "Department: " << faculty.getDepartment() << std::endl;
+    std::cout << "Title: " << faculty.getTitle() << std::endl;
+
+    return 0;
+}
