@@ -1,0 +1,33 @@
+#include <iostream>
+
+class A {
+public:
+    void displayA() 
+    {
+        std::cout << "class A" << std::endl;
+    }
+};
+
+class B {
+public:
+    void displayB()
+    {
+        std::cout << "class B" << std::endl;
+    }
+};
+
+class C : public A, public B {
+public:
+    void display()
+    {
+        
+        A::displayA();
+        B::displayB();
+    }
+};
+
+int main() {
+    C c;
+    c.display(); 
+    return 0;
+}
