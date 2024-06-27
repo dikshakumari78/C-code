@@ -1,0 +1,57 @@
+#include <iostream>
+#include <vector>
+#include <stdexcept>
+
+template <typename T>
+class CustomList {
+private:
+    std::vector<T> data;
+
+public:
+    void push_back(const T& value) {
+        data.push_back(value);
+    }
+
+    T& operator[](size_t index) {
+        if (index >= data.size()) {
+            throw std::out_of_range("Index out of range");
+        }
+        return data[index];
+    }
+
+    const T& operator[](size_t index) const {
+        if (index >= data.size()) {
+            throw std::out_of_range("Index out of range");
+        }
+        return data[index];
+    }
+
+    size_t size() const {
+        return data.size();
+    }
+
+    void print() const {
+        for (const auto& elem : data) {
+            std::cout << elem << " ";
+        }
+        std::cout << std::endl;
+    }
+};
+
+int main() {
+    CustomList<int> list;
+    list.push_back(1);
+    list.push_back(2);
+    list.push_back(3);
+
+    list.print(); // Output: 1 2 3
+
+    try {
+        std::cout << list[2] << std::endl; // Output: 3
+        std::cout << list[3] << std::endl; // Throws out_of_range exception
+    } catch (const std::out_of_range& e) {
+        std::cerr << e.what() << std::endl; // Output: Index out of range
+    }
+
+    return 0;
+}
