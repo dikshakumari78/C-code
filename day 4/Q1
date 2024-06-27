@@ -1,0 +1,24 @@
+#include<stdio.h>
+typedef struct {
+    int value;
+} Object;
+Object addObjects(Object obj1, Object obj2) {
+    Object result;
+    result.value = obj1.value + obj2.value;
+    return result;
+}
+
+void displayObject(Object obj) {
+    printf("Object value: %d\n", obj.value);
+}
+
+int main() {
+    Object obj1;
+    Object obj2;
+    obj1.value = 5;
+    obj2.value = 10;
+    Object sum = addObjects(obj1, obj2);
+    displayObject(sum);
+
+    return 0;
+}
