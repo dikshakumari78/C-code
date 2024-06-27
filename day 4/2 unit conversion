@@ -1,0 +1,31 @@
+#include <iostream>
+
+// Convert meters to feet
+double convert(double value, const std::string& unit_from, const std::string& unit_to) {
+    if (unit_from == "meters" && unit_to == "feet") {
+        return value * 3.28084;
+    } else if (unit_from == "feet" && unit_to == "meters") {
+        return value / 3.28084;
+    } else if (unit_from == "Celsius" && unit_to == "Fahrenheit") {
+        return (value * 9/5) + 32;
+    } else if (unit_from == "Fahrenheit" && unit_to == "Celsius") {
+        return (value - 32) * 5/9;
+    } else {
+        throw std::invalid_argument("Unsupported conversion");
+    }
+}
+
+int main() {
+    double value = 10.0;
+
+    // Convert meters to feet
+    double converted_value = convert(value, "meters", "feet");
+    std::cout << value << " meters is " << converted_value << " feet" << std::endl;
+
+    // Convert Celsius to Fahrenheit
+    double temperature = 25.0;
+    double converted_temp = convert(temperature, "Celsius", "Fahrenheit");
+    std::cout << temperature << " Celsius is " << converted_temp << " Fahrenheit" << std::endl;
+
+    return 0;
+}
