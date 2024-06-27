@@ -1,0 +1,22 @@
+#include <iostream>
+#include <string>
+
+class String {
+private:
+    std::string data;
+
+public:
+    String(const std::string& str) : data(str) {}
+
+    friend std::ostream& operator<<(std::ostream& os, const String& str) {
+        os << str.data;
+        return os;
+    }
+};
+
+int main() {
+    String str("Hello, World!");
+    std::cout << str << std::endl; // Output: Hello, World!
+
+    return 0;
+}
