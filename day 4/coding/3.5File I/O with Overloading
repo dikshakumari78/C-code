@@ -1,0 +1,42 @@
+#include <iostream>
+#include <fstream>
+#include <string>
+
+class FileReaderWriter {
+public:
+    void read(const std::string& filename) {
+        std::ifstream file(filename);
+        if (!file.is_open()) {
+            std::cerr << "Could not open the file: " << filename << std::endl;
+            return;
+        }
+
+        std::string line;
+        while (getline(file, line)) {
+            std::cout << line << std::endl;
+        }
+
+        file.close();
+    }
+
+    void write(const std::string& filename, const std::string& content) {
+        std::ofstream file(filename);
+        if (!file.is_open()) {
+            std::cerr << "Could not open the file: " << filename << std::endl;
+            return;
+        }
+
+        file << content;
+        file.close();
+    }
+};
+
+int main() {
+    FileReaderWriter frw;
+    std::string content = "Hello, World!\nThis is a test.";
+
+    frw.write("test.txt", content);
+    frw.read("test.txt");
+
+    return 0;
+}
