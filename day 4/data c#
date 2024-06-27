@@ -1,0 +1,29 @@
+using System;
+
+public class Date {
+    public int Year { get; set; }
+    public int Month { get; set; }
+    public int Day { get; set; }
+
+    // Overload equality operator ==
+    public static bool operator==(Date d1, Date d2) {
+        return d1.Year == d2.Year && d1.Month == d2.Month && d1.Day == d2.Day;
+    }
+
+    // Overload inequality operator !=
+    public static bool operator!=(Date d1, Date d2) {
+        return !(d1 == d2);
+    }
+
+    // Example usage
+    public static void Main() {
+        Date date1 = new Date { Year = 2024, Month = 6, Day = 27 };
+        Date date2 = new Date { Year = 2024, Month = 6, Day = 27 };
+
+        if (date1 == date2) {
+            Console.WriteLine("Dates are equal.");
+        } else {
+            Console.WriteLine("Dates are not equal.");
+        }
+    }
+}
