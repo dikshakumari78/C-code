@@ -1,0 +1,47 @@
+#include <iostream>
+using namespace std;
+
+class A {
+private:
+    int x;
+public:
+    A() {}
+    A(int i) : x(i) {}
+
+    void operator+(const A& a) {
+        int result = x + a.x;
+        cout << "The result of the addition of two objects is: " << result << endl;
+    }
+
+  
+    void operator*(const A& a) {
+        int result = x * a.x;
+        cout << "The result of the multiplication of two objects is: " << result << endl;
+    }
+
+  
+    void operator/(const A& a) {
+        if (a.x != 0) {
+            int result = x / a.x;
+            cout << "The result of the division of two objects is: " << result << endl;
+        } else {
+            cout << "Error: Division by zero!" << endl;
+        }
+    }
+
+    void display() {
+        cout << "Value of x: " << x << endl;
+    }
+};
+
+int main() {
+    A a1(10);
+    A a2(2);
+
+
+    a1 + a2;
+    a1 * a2;
+    a1 / a2;
+
+    return 0;
+}
