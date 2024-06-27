@@ -1,0 +1,46 @@
+#include <iostream>
+
+class Complex {
+private:
+    double real;
+    double imag;
+
+public:
+    Complex(double r, double i) : real(r), imag(i) {}
+
+    // Overload + operator for addition
+    Complex operator+(const Complex& other) const {
+        return Complex(real + other.real, imag + other.imag);
+    }
+
+    // Overload - operator for subtraction
+    Complex operator-(const Complex& other) const {
+        return Complex(real - other.real, imag - other.imag);
+    }
+
+    // Overload * operator for multiplication
+    Complex operator*(const Complex& other) const {
+        return Complex(real * other.real - imag * other.imag,
+                       real * other.imag + imag * other.real);
+    }
+
+    // Display the complex number
+    void display() const {
+        std::cout << real << " + " << imag << "i" << std::endl;
+    }
+};
+
+int main() {
+    Complex c1(3.0, 2.0);
+    Complex c2(1.0, 7.0);
+
+    Complex sum = c1 + c2;
+    Complex diff = c1 - c2;
+    Complex product = c1 * c2;
+
+    sum.display();
+    diff.display();
+    product.display();
+
+    return 0;
+}
