@@ -1,0 +1,30 @@
+class Time:
+    def __init__(self, hours, minutes, seconds):
+        self.hours = hours
+        self.minutes = minutes
+        self.seconds = seconds
+
+    # Overload + operator for addition
+    def __add__(self, other):
+        total_seconds = self.hours * 3600 + self.minutes * 60 + self.seconds
+        total_seconds += other.hours * 3600 + other.minutes * 60 + other.seconds
+
+        hours = total_seconds // 3600
+        total_seconds %= 3600
+        minutes = total_seconds // 60
+        seconds = total_seconds % 60
+
+        return Time(hours, minutes, seconds)
+
+    def __str__(self):
+        return f"{self.hours} hours, {self.minutes} minutes, {self.seconds} seconds"
+
+# Example usage
+t1 = Time(1, 30, 0)
+t2 = Time(0, 45, 15)
+
+print("Time 1:", t1)
+print("Time 2:", t2)
+
+t3 = t1 + t2
+print("Sum of times:", t3)
