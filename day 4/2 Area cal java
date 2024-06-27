@@ -1,0 +1,28 @@
+#include <iostream>
+#include <cmath>
+
+// Calculate area of a rectangle
+double calculateArea(double width, double height) {
+    return width * height;
+}
+
+// Calculate area of a circle
+double calculateArea(double radius) {
+    return M_PI * radius * radius;
+}
+
+int main() {
+    double width = 5.0;
+    double height = 3.0;
+    double radius = 2.5;
+
+    // Calculate area of a rectangle
+    double areaRectangle = calculateArea(width, height);
+    std::cout << "Area of rectangle: " << areaRectangle << std::endl;
+
+    // Calculate area of a circle
+    double areaCircle = calculateArea(radius);
+    std::cout << "Area of circle: " << areaCircle << std::endl;
+
+    return 0;
+}
