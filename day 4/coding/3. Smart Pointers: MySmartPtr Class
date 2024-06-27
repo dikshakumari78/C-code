@@ -1,0 +1,55 @@
+#include <iostream>
+
+template <typename T>
+class MySmartPtr {
+private:
+    T* ptr;
+
+public:
+    MySmartPtr(T* p = nullptr) : ptr(p) {}
+
+    ~MySmartPtr() {
+        delete ptr;
+    }
+
+    T& operator*() {
+        return *ptr;
+    }
+
+    T* operator->() {
+        return ptr;
+    }
+
+    // Disable copy constructor and copy assignment
+    MySmartPtr(const MySmartPtr&) = delete;
+    MySmartPtr& operator=(const MySmartPtr&) = delete;
+
+    // Move constructor and move assignment
+    MySmartPtr(MySmartPtr&& other) : ptr(other.ptr) {
+        other.ptr = nullptr;
+    }
+
+    MySmartPtr& operator=(MySmartPtr&& other) {
+        if (this != &other) {
+            delete ptr;
+            ptr = other.ptr;
+            other.ptr = nullptr;
+        }
+        return *this;
+    }
+};
+
+class Test {
+public:
+    void display() const {
+        std::cout << "Test class display function" << std::endl;
+    }
+};
+
+int main() {
+    MySmartPtr<Test> ptr(new Test());
+    ptr->display(); // Output: Test class display function
+    (*ptr).display(); // Output: Test class display function
+
+    return 0;
+}
