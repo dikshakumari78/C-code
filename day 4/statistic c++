@@ -1,0 +1,58 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+// Calculate average of an array of integers
+double average(const std::vector<int>& nums) {
+    int sum = 0;
+    for (int num : nums) {
+        sum += num;
+    }
+    return static_cast<double>(sum) / nums.size();
+}
+
+// Calculate average of an array of doubles
+double average(const std::vector<double>& nums) {
+    double sum = 0.0;
+    for (double num : nums) {
+        sum += num;
+    }
+    return sum / nums.size();
+}
+
+// Find minimum of an array of integers
+int minimum(const std::vector<int>& nums) {
+    return *std::min_element(nums.begin(), nums.end());
+}
+
+// Find minimum of an array of doubles
+double minimum(const std::vector<double>& nums) {
+    return *std::min_element(nums.begin(), nums.end());
+}
+
+// Find maximum of an array of integers
+int maximum(const std::vector<int>& nums) {
+    return *std::max_element(nums.begin(), nums.end());
+}
+
+// Find maximum of an array of doubles
+double maximum(const std::vector<double>& nums) {
+    return *std::max_element(nums.begin(), nums.end());
+}
+
+int main() {
+    std::vector<int> int_nums = {3, 1, 4, 1, 5, 9, 2, 6};
+    std::vector<double> double_nums = {3.5, 1.2, 4.7, 2.1, 5.0, 1.8};
+
+    // Calculate and display statistics for integers
+    std::cout << "Average of integers: " << average(int_nums) << std::endl;
+    std::cout << "Minimum of integers: " << minimum(int_nums) << std::endl;
+    std::cout << "Maximum of integers: " << maximum(int_nums) << std::endl;
+
+    // Calculate and display statistics for doubles
+    std::cout << "Average of doubles: " << average(double_nums) << std::endl;
+    std::cout << "Minimum of doubles: " << minimum(double_nums) << std::endl;
+    std::cout << "Maximum of doubles: " << maximum(double_nums) << std::endl;
+
+    return 0;
+}
