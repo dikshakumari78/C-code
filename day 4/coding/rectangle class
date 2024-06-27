@@ -1,0 +1,33 @@
+#include <iostream>
+
+class Rectangle {
+private:
+    double width;
+    double height;
+
+public:
+    Rectangle(double w = 0, double h = 0) : width(w), height(h) {}
+
+    double getArea() const {
+        return width * height;
+    }
+
+    Rectangle operator+(const Rectangle& other) const {
+        double combinedArea = this->getArea() + other.getArea();
+        return Rectangle(combinedArea, 1); // Assuming the resulting rectangle has height 1 and width equal to combined area.
+    }
+
+    void print() const {
+        std::cout << "Width: " << width << ", Height: " << height << ", Area: " << getArea() << std::endl;
+    }
+};
+
+int main() {
+    Rectangle r1(3, 4);
+    Rectangle r2(2, 5);
+
+    Rectangle r3 = r1 + r2;
+    r3.print(); // Output: Width: 23, Height: 1, Area: 23
+
+    return 0;
+}
