@@ -1,0 +1,112 @@
+#include <iostream>
+#include <vector>
+#include <stdexcept>
+
+class Matrix {
+private:
+    std::vector<std::vector<int>> data;
+    int rows;
+    int cols;
+
+public:
+    Matrix(int r, int c) : rows(r), cols(c), data(r, std::vector<int>(c, 0)) {}
+
+    void setElement(int r, int c, int value) {
+        if (r >= 0 && r < rows && c >= 0 && c < cols) {
+            data[r][c] = value;
+        }
+    }
+
+    Matrix operator+(const Matrix& other) const {
+        if (rows != other.rows || cols != other.cols) {
+            throw std::invalid_argument("Matrices must have the same dimensions for addition");
+        }
+
+        Matrix result(rows, cols);
+        for (int i = 0; i < rows; ++i) {
+            for (int j = 0; j < cols; ++j) {
+                result.data[i][j] = data[i][j] + other.data[i][j];
+            }
+        }
+        return result;
+    }
+
+    Matrix operator-(const Matrix& other) const {
+        if (rows != other.rows || cols != other.cols) {
+            throw std::invalid_argument("Matrices must have the same dimensions for subtraction");
+        }
+
+        Matrix result(rows, cols);
+        for (int i = 0; i < rows; ++i) {
+            for (int j = 0; j < cols; ++j) {
+                result.data[i][j] = data[i][j] - other.data[i][j];
+            }
+        }
+        return result;
+    }
+
+    Matrix operator*(const Matrix& other) const {
+        if (cols != other.rows) {
+            throw std::invalid_argument("Matrices must have compatible dimensions for multiplication");
+        }
+
+        Matrix result(rows, other.cols);
+        for (int i = 0; i < rows; ++i) {
+            for (int j = 0; j < other.cols; ++j) {
+                for (int k = 0; k < cols; ++k) {
+                    result.data[i][j] += data[i][k] * other.data[k][j];
+                }
+            }
+        }
+        return result;
+    }
+
+    void print() const {
+        for (const auto& row : data) {
+            for (const auto& elem : row) {
+                std::cout << elem << " ";
+            }
+            std::cout << std::endl;
+        }
+    }
+};
+
+int main() {
+    Matrix m1(2, 3);
+    m1.setElement(0, 0, 1);
+    m1.setElement(0, 1, 2);
+    m1.setElement(0, 2, 3);
+    m1.setElement(1, 0, 4);
+    m1.setElement(1, 1, 5);
+    m1.setElement(1, 2, 6);
+
+    Matrix m2(2, 3);
+    m2.setElement(0, 0, 6);
+    m2.setElement(0, 1, 5);
+    m2.setElement(0, 2, 4);
+    m2.setElement(1, 0, 3);
+    m2.setElement(1, 1, 2);
+    m2.setElement(1, 2, 1);
+
+    Matrix m3 = m1 + m2;
+    m3.print();
+    // Output:
+    // 7 7 7
+    // 7 7 7
+
+    Matrix m4(3, 2);
+    m4.setElement(0, 0, 1);
+    m4.setElement(0, 1, 2);
+    m4.setElement(1, 0, 3);
+    m4.setElement(1, 1, 4);
+    m4.setElement(2, 0, 5);
+    m4.setElement(2, 1, 6);
+
+    Matrix m5 = m1 * m4;
+    m5.print();
+    // Output:
+    // 22 28
+    // 49 64
+
+    return 0;
+}
