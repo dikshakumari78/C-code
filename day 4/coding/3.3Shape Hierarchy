@@ -1,0 +1,55 @@
+#include <iostream>
+#include <cmath>
+
+class Shape {
+public:
+    virtual double getArea() const = 0;
+};
+
+class Circle : public Shape {
+private:
+    double radius;
+
+public:
+    Circle(double r) : radius(r) {}
+
+    double getArea() const override {
+        return M_PI * radius * radius;
+    }
+};
+
+class Rectangle : public Shape {
+private:
+    double length, width;
+
+public:
+    Rectangle(double l, double w) : length(l), width(w) {}
+
+    double getArea() const override {
+        return length * width;
+    }
+};
+
+class Square : public Shape {
+private:
+    double side;
+
+public:
+    Square(double s) : side(s) {}
+
+    double getArea() const override {
+        return side * side;
+    }
+};
+
+int main() {
+    Circle c(5);
+    Rectangle r(4, 6);
+    Square s(3);
+
+    std::cout << "Circle Area: " << c.getArea() << std::endl;
+    std::cout << "Rectangle Area: " << r.getArea() << std::endl;
+    std::cout << "Square Area: " << s.getArea() << std::endl;
+
+    return 0;
+}
