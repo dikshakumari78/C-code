@@ -1,0 +1,48 @@
+#include <iostream>
+#include <vector>
+#include <map>
+
+class Polynomial {
+private:
+    std::map<int, double> terms; // key: exponent, value: coefficient
+
+public:
+    Polynomial() {}
+
+    void addTerm(double coefficient, int exponent) {
+        terms[exponent] += coefficient;
+    }
+
+    Polynomial operator+(const Polynomial& other) const {
+        Polynomial result = *this;
+
+        for (const auto& term : other.terms) {
+            result.terms[term.first] += term.second;
+        }
+
+        return result;
+    }
+
+    void print() const {
+        for (const auto& term : terms) {
+            std::cout << term.second << "x^" << term.first << " ";
+        }
+        std::cout << std::endl;
+    }
+};
+
+int main() {
+    Polynomial p1;
+    p1.addTerm(2, 2);
+    p1.addTerm(3, 1);
+
+    Polynomial p2;
+    p2.addTerm(1, 2);
+    p2.addTerm(4, 0);
+
+    Polynomial p3 = p1 + p2;
+
+    p3.print(); // Output should be: 3x^2 3x^1 4x^0 
+
+    return 0;
+}
