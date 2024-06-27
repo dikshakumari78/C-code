@@ -1,0 +1,39 @@
+#include <iostream>
+#include <sstream>
+#include <iomanip>
+
+// Format integer value
+std::string formatString(const std::string& format, int value) {
+    std::ostringstream oss;
+    oss << format << " " << value;
+    return oss.str();
+}
+
+// Format double value
+std::string formatString(const std::string& format, double value) {
+    std::ostringstream oss;
+    oss << std::fixed << std::setprecision(2) << format << " " << value;
+    return oss.str();
+}
+
+// Format string value
+std::string formatString(const std::string& format, const std::string& value) {
+    return format + " " + value;
+}
+
+int main() {
+    int intValue = 42;
+    double doubleValue = 3.14;
+    std::string stringValue = "Hello, World!";
+
+    // Format and display integer value
+    std::cout << formatString("Integer value:", intValue) << std::endl;
+
+    // Format and display double value
+    std::cout << formatString("Double value:", doubleValue) << std::endl;
+
+    // Format and display string value
+    std::cout << formatString("String value:", stringValue) << std::endl;
+
+    return 0;
+}
