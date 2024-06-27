@@ -1,0 +1,68 @@
+#include <iostream>
+#include <string>
+#include <unordered_map>
+
+class Money {
+private:
+    double amount;
+    std::string currency;
+    static std::unordered_map<std::string, double> exchangeRates;
+
+public:
+    Money(double amt, std::string curr) : amount(amt), currency(curr) {}
+
+    static void setExchangeRate(const std::string& curr, double rate) {
+        exchangeRates[curr] = rate;
+    }
+
+    double inUSD() const {
+        if (currency == "USD") return amount;
+        return amount * exchangeRates.at(currency);
+    }
+
+    bool operator==(const Money& other) const {
+        return inUSD() == other.inUSD();
+    }
+
+    bool operator!=(const Money& other) const {
+        return !(*this == other);
+    }
+
+    bool operator<(const Money& other) const {
+        return inUSD() < other.inUSD();
+    }
+
+    bool operator>(const Money& other) const {
+        return inUSD() > other.inUSD();
+    }
+
+    bool operator<=(const Money& other) const {
+        return !(*this > other);
+    }
+
+    bool operator>=(const Money& other) const {
+        return !(*this < other);
+    }
+
+    void print() const {
+        std::cout << amount << " " << currency << std::endl;
+    }
+};
+
+std::unordered_map<std::string, double> Money::exchangeRates;
+
+int main() {
+    Money::setExchangeRate("EUR", 1.1); // 1 EUR = 1.1 USD
+
+    Money m1(100, "USD");
+    Money m2(90, "EUR");
+
+    std::cout << (m1 == m2) << std::endl; // Output: 1 (true)
+    std::cout << (m1 != m2) << std::endl; // Output: 0 (false)
+    std::cout << (m1 < m2) << std::endl;  // Output: 0 (false)
+    std::cout << (m1 > m2) << std::endl;  // Output: 0 (false)
+    std::cout << (m1 <= m2) << std::endl; // Output: 1 (true)
+    std::cout << (m1 >= m2) << std::endl; // Output: 1 (true)
+
+    return 0;
+}
