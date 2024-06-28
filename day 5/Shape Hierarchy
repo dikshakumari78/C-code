@@ -1,0 +1,55 @@
+#include <iostream>
+using namespace std;
+
+// Base class Shape with a pure virtual function draw()
+class Shape {
+public:
+    virtual void draw() = 0; // Pure virtual function
+    virtual ~Shape() {} // Virtual destructor for proper cleanup of derived classes
+};
+
+// Derived class Square from Shape
+class Square : public Shape {
+public:
+    void draw() override {
+        cout << "Drawing a Square: []" << endl;
+    }
+};
+
+// Derived class Circle from Shape
+class Circle : public Shape {
+public:
+    void draw() override {
+        cout << "Drawing a Circle: OOO" << endl;
+    }
+};
+
+// Derived class Triangle from Shape
+class Triangle : public Shape {
+public:
+    void draw() override {
+        cout << "Drawing a Triangle: /\\ " << endl;
+    }
+};
+
+// Function to call draw() on a Shape pointer
+void printShape(Shape* shape) {
+    shape->draw();
+}
+
+int main() {
+    // Create objects of the derived classes
+    Square square;
+    Circle circle;
+    Triangle triangle;
+
+    // Store them in a Shape* array
+    Shape* shapes[] = { &square, &circle, &triangle };
+
+    // Demonstrate polymorphism
+    for (Shape* shape : shapes) {
+        printShape(shape);
+    }
+
+    return 0;
+}
