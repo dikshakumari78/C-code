@@ -1,0 +1,113 @@
+#include <iostream>
+#include <vector>
+
+class Matrix {
+private:
+    int rows;
+    int cols;
+    std::vector<std::vector<int>> data;
+
+public:
+    
+    Matrix(int r, int c) : rows(r), cols(c), data(r, std::vector<int>(c, 0)) {}
+    int getRows() const { return rows; }
+
+    int getCols() const { return cols; }
+
+     void setValue(int i, int j, int value) { data[i][j] = value; }
+Matrix operator+(const Matrix& other) const {
+        if (rows != other.rows || cols != other.cols) {
+            throw std::invalid_argument("Matrix dimensions must be the same for addition");
+        }
+
+        Matrix result(rows, cols);
+        for (int i = 0; i < rows; ++i) {
+            for (int j = 0; j < cols; ++j) {
+                result.data[i][j] = data[i][j] + other.data[i][j];
+            }
+        }
+        return result;
+    }
+
+    Matrix operator*(const Matrix& other) const {
+        if (cols != other.rows) {
+            throw std::invalid_argument("Number of columns in the first matrix must be equal to the number of rows in the second matrix");
+        }
+
+        Matrix result(rows, other.cols);
+        for (int i = 0; i < rows; ++i) {
+            for (int j = 0; j < other.cols; ++j) {
+                for (int k = 0; k < cols; ++k) {
+                    result.data[i][j] += data[i][k] * other.data[k][j];
+                }
+            }
+        }
+        return result;
+    }
+
+    void display() const {
+        for (int i = 0; i < rows; ++i) {
+            for (int j = 0; j < cols; ++j) {
+                std::cout << data[i][j] << " ";
+            }
+            std::cout << std::endl;
+        }
+        std::cout << std::endl;
+    }
+};
+
+Matrix inputMatrix() {
+    int rows, cols;
+    std::cout << "Enter number of rows: ";
+    std::cin >> rows;
+    std::cout << "Enter number of columns: ";
+    std::cin >> cols;
+
+    Matrix mat(rows, cols);
+
+    std::cout << "Enter matrix elements row by row:" << std::endl;
+    for (int i = 0; i < rows; ++i) {
+        for (int j = 0; j < cols; ++j) {
+            int value;
+            std::cout << "Enter element at position (" << i << ", " << j << "): ";
+            std::cin >> value;
+            mat.setValue(i, j, value);
+        }
+    }
+
+    return mat;
+}
+int main() {
+    std::cout << "Enter details for Matrix A:" << std::endl;
+    Matrix A = inputMatrix();
+
+    std::cout << "Enter details for Matrix B:" << std::endl;
+    Matrix B = inputMatrix();
+
+    try {
+        
+        std::cout << "Matrix A:" << std::endl;
+        A.display();
+        std::cout << "Matrix B:" << std::endl;
+        B.display();
+        std::cout << "Result of A + B:" << std::endl;
+        (A + B).display(); 
+    } catch (const std::invalid_argument& e) {
+        std::cerr << "Error during addition: " << e.what() << std::endl;
+    }
+
+    try {
+        
+        std::cout << "Matrix A:" << std::endl;
+        A.display();
+        std::cout << "Matrix B:" << std::endl;
+        B.display();
+        std::cout << "Result of A * B:" << std::endl;
+        (A * B).display();  
+    } catch (const std::invalid_argument& e) {
+        std::cerr << "Error during multiplication: " << e.what() << std::endl;
+    }
+
+    return 0;
+}
+
