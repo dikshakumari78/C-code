@@ -1,0 +1,18 @@
+#include <iostream>
+using namespace std;
+void test(float a);
+void test(float a, float b=7.0);
+void test(float a) {
+    cout<<"x is "<<a<<endl;
+    
+}
+void test(float a, float b){
+    cout<<"x is "<<a<<endl<<"y is"<<b<<endl;
+}
+int main() {
+    double x=7.0, y=8.0;
+    test(static_cast<float>(x));
+    test(static_cast<float>(x));
+    test(static_cast<float>(y));
+    return 0;
+}
