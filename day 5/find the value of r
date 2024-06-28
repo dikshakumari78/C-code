@@ -1,0 +1,48 @@
+#include <iostream>
+
+class point {
+public:
+    double x, y;
+
+    point() {
+        x = 0.0; 
+        y = 0.0;
+        std::cout << "default constructor" << std::endl;
+    }
+
+    point(double nx, double ny) {
+        x = nx; 
+        y = ny;
+        std::cout << "2-parameter constructor" << std::endl;
+    }
+    point(const point &p) {
+        x = p.x;
+        y = p.y;
+        std::cout << "copy constructor" << std::endl;
+    }
+
+    void print() const {
+        std::cout << "point(" << x << ", " << y << ")" << std::endl;
+    }
+};
+
+int main() {
+    point q(1.0, 2.0);  
+    point r = q;        
+    std::cout << "Values of q: ";
+    q.print();
+    std::cout << "Values of r: ";
+    r.print();
+
+    point p1(3.0, 4.0);
+    point p2 = p1;  
+    point p3(p1);   
+    std::cout << "Values of p1: ";
+    p1.print();
+    std::cout << "Values of p2: ";
+    p2.print();
+    std::cout << "Values of p3: ";
+    p3.print();
+
+    return 0;
+}
