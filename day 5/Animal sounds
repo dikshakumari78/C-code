@@ -1,0 +1,55 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+
+class Animal {
+public:
+    virtual string makeSound() = 0; 
+    virtual ~Animal() {} 
+};
+
+
+class Dog : public Animal {
+public:
+    string makeSound() override {
+        return "Woof!";
+    }
+};
+
+
+class Cat : public Animal {
+public:
+    string makeSound() override {
+        return "Meow!";
+    }
+};
+
+
+class Bird : public Animal {
+public:
+    string makeSound() override {
+        return "Chirp!";
+    }
+};
+
+
+void playAnimalSound(Animal* animal) {
+    cout << animal->makeSound() << endl;
+}
+
+int main() {
+
+    Dog dog;
+    Cat cat;
+    Bird bird;
+
+   
+    Animal* animals[] = { &dog, &cat, &bird };
+
+    for (Animal* animal : animals) {
+        playAnimalSound(animal);
+    }
+
+    return 0;
+}
