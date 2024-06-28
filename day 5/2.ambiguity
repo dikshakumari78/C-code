@@ -1,0 +1,17 @@
+#include <iostream>
+using namespace std;
+void test(int a)
+{
+    cout<<"x is"<<a<<endl;
+}
+void test(int a, int b=6)
+{
+    cout<<"x is "<<a<<endl<<"y is"<<b<<endl;
+}
+int main()
+{
+    double x=6;y=8;
+    test(x);
+    test(x,y);
+    return 0;
+}
