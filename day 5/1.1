@@ -1,0 +1,115 @@
+#include <iostream>
+
+class Distance {
+private:
+    int feet;
+    float inches;
+
+public:
+    // Constructor to initialize distance
+    Distance(int ft = 0, float in = 0) : feet(ft), inches(in) {}
+
+    // Overload the + operator for addition of distances
+    Distance operator+(const Distance& d) const {
+        int newFeet = feet + d.feet;
+        float newInches = inches + d.inches;
+
+        if (newInches >= 12.0) {
+            newInches -= 12.0;
+            newFeet++;
+        }
+
+        return Distance(newFeet, newInches);
+    }
+
+    // Overload the - operator for subtraction of distances
+    Distance operator-(const Distance& d) const {
+        int newFeet = feet - d.feet;
+        float newInches = inches - d.inches;
+
+        if (newInches < 0) {
+            newInches += 12.0;
+            newFeet--;
+        }
+
+        return Distance(newFeet, newInches);
+    }
+
+    // Overload comparison operators based on total distance
+    bool operator==(const Distance& d) const {
+        return (feet == d.feet && inches == d.inches);
+    }
+
+    bool operator!=(const Distance& d) const {
+        return !(*this == d);
+    }
+
+    bool operator<(const Distance& d) const {
+        float thisTotal = feet * 12 + inches;
+        float dTotal = d.feet * 12 + d.inches;
+        return thisTotal < dTotal;
+    }
+
+    bool operator>(const Distance& d) const {
+        float thisTotal = feet * 12 + inches;
+        float dTotal = d.feet * 12 + d.inches;
+        return thisTotal > dTotal;
+    }
+
+    bool operator<=(const Distance& d) const {
+        return (*this < d || *this == d);
+    }
+
+    bool operator>=(const Distance& d) const {
+        return (*this > d || *this == d);
+    }
+
+    // Display the distance
+    void display() const {
+        std::cout << "Distance: " << feet << " feet " << inches << " inches" << std::endl;
+    }
+};
+int main() {
+    // Create instances of Distance
+    Distance d1(3, 9.5);
+    Distance d2(4, 7.25);
+    Distance d3(8, 3.0);
+
+    // Addition of distances
+    Distance sum = d1 + d2;
+    std::cout << "Sum of ";
+    d1.display();
+    std::cout << "and ";
+    d2.display();
+    std::cout << "is ";
+    sum.display();
+
+    std::cout << std::endl;
+
+    // Subtraction of distances
+    Distance diff = d3 - d1;
+    std::cout << "Difference of ";
+    d3.display();
+    std::cout << "and ";
+    d1.display();
+    std::cout << "is ";
+    diff.display();
+
+    std::cout << std::endl;
+
+    // Comparisons of distances
+    if (d1 == d2)
+        std::cout << "Distance d1 is equal to d2" << std::endl;
+    if (d1 != d3)
+        std::cout << "Distance d1 is not equal to d3" << std::endl;
+    if (d2 < d3)
+        std::cout << "Distance d2 is less than d3" << std::endl;
+    if (d3 > d1)
+        std::cout << "Distance d3 is greater than d1" << std::endl;
+    if (d2 <= d3)
+        std::cout << "Distance d2 is less than or equal to d3" << std::endl;
+    if (d3 >= d1)
+        std::cout << "Distance d3 is greater than or equal to d1" << std::endl;
+
+    return 0;
+}
