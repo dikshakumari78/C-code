@@ -1,0 +1,50 @@
+#include <iostream>
+#include <vector>
+#include <string>
+
+class Animal {
+public:
+    virtual void speak() const = 0;  
+    virtual ~Animal() {} 
+};
+
+class Lion : public Animal {
+public:
+    void speak() const override {
+        std::cout << "The lion roars." << std::endl;
+    }
+};
+
+class Elephant : public Animal {
+public:
+    void speak() const override {
+        std::cout << "The elephant trumpets." << std::endl;
+    }
+};
+
+class Snake : public Animal {
+public:
+    void speak() const override {
+        std::cout << "The snake hisses." << std::endl;
+    }
+};
+
+int main() {
+    
+    std::vector<Animal*> sound;
+
+    
+    sound.push_back(new Lion());
+    sound.push_back(new Elephant());
+    sound.push_back(new Snake());
+
+    for (const auto& animal : sound) {
+        animal->speak();
+    }
+
+    for (auto& animal : sound) {
+        delete animal;
+    }
+
+    return 0;
+}
