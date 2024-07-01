@@ -1,0 +1,33 @@
+#include <iostream>
+class Point;
+
+class PointOutputStream {
+public:
+    friend std::ostream& operator<<(std::ostream& os, const Point& point);
+};
+class Point {
+private:
+    double x;
+    double y;
+
+public:
+  
+    Point(double xCoord, double yCoord) : x(xCoord), y(yCoord) {}
+
+    friend std::ostream& operator<<(std::ostream& os, const Point& point);
+};
+
+std::ostream& operator<<(std::ostream& os, const Point& point) {
+    os << "(" << point.x << ", " << point.y << ")";
+    return os;
+}
+
+int main() {
+
+    Point p1(3.5, 4.2);
+    Point p2(-2.0, 1.8);
+    std::cout << "Point p1: " << p1 << std::endl;
+    std::cout << "Point p2: " << p2 << std::endl;
+
+    return 0;
+}
