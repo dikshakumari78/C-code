@@ -1,0 +1,43 @@
+#include <iostream>
+using namespace std;
+ 
+class CurrencyConverter {
+public:
+   static double exchangeRate; // USD to EUR exchange rate
+ 
+   // Converts an amount from USD to EUR
+   static double convertToEur(double amount) {
+       return amount * exchangeRate;
+   }
+ 
+   // Converts an amount from EUR to USD
+   static double convertFromEur(double amount) {
+       return amount / exchangeRate;
+   }
+};
+ 
+// Initialize the static variable
+double CurrencyConverter::exchangeRate = 0.85; // Example exchange rate
+ 
+int main() {
+   double amount;
+   char direction;
+   
+   cout << "Enter the amount: ";
+   cin >> amount;
+   
+   cout << "Enter the conversion direction (U for USD to EUR, E for EUR to USD): ";
+   cin >> direction;
+   
+   if (direction == 'U' || direction == 'u') {
+       double convertedAmount = CurrencyConverter::convertToEur(amount);
+       cout << amount << " USD is " << convertedAmount << " EUR." << endl;
+   } else if (direction == 'E' || direction == 'e') {
+       double convertedAmount = CurrencyConverter::convertFromEur(amount);
+       cout << amount << " EUR is " << convertedAmount << " USD." << endl;
+   } else {
+       cout << "Invalid conversion direction entered." << endl;
+   }
+   
+   return 0;
+}
