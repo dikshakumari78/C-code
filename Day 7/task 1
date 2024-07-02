@@ -1,0 +1,94 @@
+ 
+#include <iostream>
+#include <string>
+#include <ctime>
+ 
+using namespace std;
+ 
+class User {
+private:
+   string username;
+   string profilePicture;
+ 
+protected:
+   // Protected accessor methods for derived classes
+   string getUsername() { return username; }
+   string getProfilePicture() { return profilePicture; }
+ 
+public:
+   // Constructor
+   User(string username, string profilePicture) : username(username), profilePicture(profilePicture) {}
+ 
+   // Public accessor methods
+   string getPublicUsername() { return username; }
+   string getPublicProfilePicture() { return profilePicture; }
+};
+ 
+class Post : public User {
+private:
+   string postContent;
+   time_t timestamp;
+ 
+public:
+   // Constructor
+   Post(string username, string profilePicture, string postContent) : User(username, profilePicture), postContent(postContent) {
+       timestamp = time(0); // Set timestamp to current time
+   }
+ 
+   // Get post information
+   string getPostInfo() {
+       return "Username: " + getUsername() + ", Profile Picture: " + getProfilePicture() + ", Post Content: " + postContent + ", Timestamp: " + ctime(&timestamp);
+   }
+};
+ 
+// Basic interaction function (refactored to use public accessor methods)
+void basicInteract(User& user1, User& user2) {
+   cout << "User " << user1.getPublicUsername() << " interacts with User " << user2.getPublicUsername() << "." << endl;
+}
+ 
+// Overloaded interact functions
+void likePost(User& user, Post& post) {
+   cout << "User " << user.getPublicUsername() << " likes Post by " << post.getPublicUsername() << "." << endl;
+}
+ 
+void followUser(User& follower, User& followed) {
+   cout << "User " << follower.getPublicUsername() << " starts following User " << followed.getPublicUsername() << "." << endl;
+}
+ 
+// Bonus Challenge: Implementing friend connections
+class Friendship {
+private:
+   User* user1;
+   User* user2;
+ 
+public:
+   Friendship(User& user1, User& user2) : user1(&user1), user2(&user2) {}
+ 
+   void interact() {
+       if (areFriends()) {
+           cout << "Friends " << user1->getPublicUsername() << " and " << user2->getPublicUsername() << " interact." << endl;
+       } else {
+           cout << "User " << user1->getPublicUsername() << " interacts with User " << user2->getPublicUsername() << "." << endl;
+       }
+   }
+ 
+   bool areFriends() {
+       // Simple implementation: assume friendship is mutual
+       return true; // Replace with actual friendship logic
+   }
+};
+ 
+int main() {
+   User user1("Alice", "alice.jpg");
+   User user2("Bob", "bob.jpg");
+   Post post1("Alice", "alice.jpg", "Hello, world!");
+ 
+   basicInteract(user1, user2);
+   likePost(user2, post1);
+   followUser(user2, user1);
+ 
+   Friendship friendship(user1, user2);
+   friendship.interact();
+ 
+   return 0;
+}
