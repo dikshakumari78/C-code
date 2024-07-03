@@ -1,0 +1,86 @@
+#include <iostream>
+#include <cmath>
+
+// Abstract base class
+class Shape {
+public:
+    virtual ~Shape() {}
+
+    // Pure virtual function for calculating the area
+    virtual double calculateArea() const = 0;
+
+    // Virtual function for displaying shape details
+    virtual void display() const = 0;
+};
+
+// Derived class for Circle
+class Circle : public Shape {
+private:
+    double radius;
+
+public:
+    Circle(double r) : radius(r) {}
+
+    double calculateArea() const override {
+        return M_PI * radius * radius;
+    }
+
+    void display() const override {
+        std::cout << "Circle with radius: " << radius << std::endl;
+    }
+};
+
+// Derived class for Rectangle
+class Rectangle : public Shape {
+private:
+    double width;
+    double height;
+
+public:
+    Rectangle(double w, double h) : width(w), height(h) {}
+
+    double calculateArea() const override {
+        return width * height;
+    }
+
+    void display() const override {
+        std::cout << "Rectangle with width: " << width << " and height: " << height << std::endl;
+    }
+};
+
+// Derived class for Triangle
+class Triangle : public Shape {
+private:
+    double base;
+    double height;
+
+public:
+    Triangle(double b, double h) : base(b), height(h) {}
+
+    double calculateArea() const override {
+        return 0.5 * base * height;
+    }
+
+    void display() const override {
+        std::cout << "Triangle with base: " << base << " and height: " << height << std::endl;
+    }
+};
+
+// Function to display the area of any shape
+void displayArea(const Shape& shape) {
+    shape.display();
+    std::cout << "Area: " << shape.calculateArea() << std::endl;
+}
+
+int main() {
+    Circle circle(7.0);
+    Rectangle rectangle(2.0, 1.0);
+    Triangle triangle(2.0, 7.0);
+
+    // Polymorphic behavior
+    displayArea(circle);
+    displayArea(rectangle);
+    displayArea(triangle);
+
+    return 0;
+}
