@@ -1,0 +1,65 @@
+#include <iostream>
+
+template <typename T>
+class SmartPointer {
+private:
+    T *ptr;
+    size_t *refCount;
+
+public:
+    SmartPointer(T *p = nullptr) : ptr(p), refCount(new size_t(1)) {}
+
+    ~SmartPointer() {
+        decrementRefCount();
+    }
+
+    SmartPointer(const SmartPointer<T> &other) : ptr(other.ptr), refCount(other.refCount) {
+        (*refCount)++;
+    }
+    SmartPointer<T>& operator=(const SmartPointer<T> &other) {
+        if (this != &other) {
+            decrementRefCount();
+            ptr = other.ptr;
+            refCount = other.refCount;
+            (*refCount)++;
+        }
+        return *this;
+    }
+
+    T& operator*() const {
+        return *ptr;
+    }
+
+    T* operator->() const {
+        return ptr;
+    }
+    size_t use_count() const {
+        return *refCount;
+    }
+
+private:
+    void decrementRefCount() {
+        if (--(*refCount) == 0) {
+            delete ptr;
+            delete refCount;
+        }
+    }
+};
+
+int main() {
+    SmartPointer<int> sp1(new int(20));
+    std::cout << "sp1: " << *sp1 << ", ref count: " << sp1.use_count() << std::endl;
+
+    {
+        SmartPointer<int> sp2 = sp1; 
+        std::cout << "sp2: " << *sp2 << ", ref count: " << sp2.use_count() << std::endl;
+    }
+
+    std::cout << "sp1 after sp2 scope: " << *sp1 << ", ref count: " << sp1.use_count() << std::endl;
+
+    SmartPointer<int> sp3(new int(40));
+    sp1 = sp3; 
+    std::cout << "sp1 after assignment: " << *sp1 << ", ref count: " << sp1.use_count() << std::endl;
+
+    return 0;
+}
