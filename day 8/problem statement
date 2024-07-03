@@ -1,0 +1,33 @@
+#include <iostream>
+using namespace std;
+
+template <typename T>
+T findMinimum(T arr[], int n) {
+    if (n <= 0) {
+        throw std::invalid_argument("Array size must be greater than 0");
+    }
+
+    T minElement = arr[0];
+    for (int i = 1; i < n; ++i) {
+        if (arr[i] < minElement) {
+            minElement = arr[i];
+        }
+    }
+    return minElement;
+}
+
+int main() {
+    int intArr[] = {41, 12, 28, 12, 11};
+    double doubleArr[] = {4.5, 3.1, 8.5, 6.3,2.7};
+    char charArr[] = {'d', 'i', 'k', 's', 'h','a'};
+
+    int intSize = sizeof(intArr) / sizeof(intArr[0]);
+    int doubleSize = sizeof(doubleArr) / sizeof(doubleArr[0]);
+    int charSize = sizeof(charArr) / sizeof(charArr[0]);
+
+    cout << "Minimum in intArr: " << findMinimum(intArr, intSize) << endl;
+    cout << "Minimum in doubleArr: " << findMinimum(doubleArr, doubleSize) << endl;
+    cout << "Minimum in charArr: " << findMinimum(charArr, charSize) << endl;
+
+    return 0;
+}
