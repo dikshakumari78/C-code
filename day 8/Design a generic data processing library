@@ -1,0 +1,84 @@
+#include <iostream>
+#include <vector>
+#include <string>
+template <typename T>
+class DataContainer {
+public:
+    
+    DataContainer(size_t size = 0) : data(size) {}
+
+    T& operator[](size_t index) {
+        return data[index];
+    }
+    void printAll() const {
+        for (const auto& element : data) {
+            std::cout << element << " ";
+        }
+        std::cout << std::endl;
+    }
+    size_t size() const {
+        return data.size();
+    }
+    void push_back(const T& value) {
+        data.push_back(value);
+    }
+
+private:
+    std::vector<T> data; 
+};
+
+template <typename T>
+void swap(DataContainer<T>& a, DataContainer<T>& b) {
+    if (a.size() != b.size()) {
+        throw std::invalid_argument("Containers must have the same size to swap");
+    }
+    for (size_t i = 0; i < a.size(); ++i) {
+        std::swap(a[i], b[i]); 
+    }
+}
+
+int main() {
+    DataContainer<int> intContainer(5);
+    DataContainer<float> floatContainer(5);
+    DataContainer<std::string> stringContainer(3);
+
+    for (size_t i = 0; i < intContainer.size(); ++i) {
+        intContainer[i] = static_cast<int>(i * 2); 
+    }
+
+    for (size_t i = 0; i < floatContainer.size(); ++i) {
+        floatContainer[i] = static_cast<float>(i * 1.5); 
+    }
+
+    stringContainer[0] = "Hello";
+    stringContainer[1] = "Generic";
+    stringContainer[2] = "World";
+
+    std::cout << "Initial contents:" << std::endl;
+    intContainer.printAll();
+    floatContainer.printAll();
+    stringContainer.printAll();
+
+    DataContainer<int> anotherIntContainer(5);
+    for (size_t i = 0; i < anotherIntContainer.size(); ++i) {
+        anotherIntContainer[i] = static_cast<int>(i * 3); 
+    }
+
+    std::cout << "\nBefore swap:" << std::endl;
+    intContainer.printAll();
+    anotherIntContainer.printAll();
+
+    swap(intContainer, anotherIntContainer);
+    std::cout << "After swap:" << std::endl;
+    intContainer.printAll();
+    anotherIntContainer.printAll();
+
+    std::cout << "\nDemonstrate push_back:" << std::endl;
+    DataContainer<int> dynamicContainer;
+    dynamicContainer.push_back(10);
+    dynamicContainer.push_back(20);
+    dynamicContainer.push_back(30);
+    dynamicContainer.printAll();
+
+    return 0;
+}
