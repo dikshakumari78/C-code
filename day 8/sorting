@@ -1,0 +1,145 @@
+#include <iostream>
+#include <vector>
+#include <stdexcept>
+
+template <typename T>
+class DataContainer {
+public:
+    DataContainer(size_t size = 0) : data(size) {}
+
+    T& operator[](size_t index) {
+        return data[index];
+    }
+
+    void printAll() const {
+        for (const auto& element : data) {
+            std::cout << element << " ";
+        }
+        std::cout << std::endl;
+    }
+
+    size_t size() const {
+        return data.size();
+    }
+
+    void push_back(const T& value) {
+        data.push_back(value);
+    }
+
+private:
+    std::vector<T> data;
+};
+template <typename T>
+struct Node {
+    T data;
+    Node* next;
+
+    Node(const T& value) : data(value), next(nullptr) {}
+};
+
+template <typename T>
+class LinkedList {
+public:
+    LinkedList() : head(nullptr) {}
+
+    ~LinkedList() {
+        clear();
+    }
+
+    void push_back(const T& value) {
+        Node<T>* newNode = new Node<T>(value);
+        if (!head) {
+            head = newNode;
+        } else {
+            Node<T>* temp = head;
+            while (temp->next) {
+                temp = temp->next;
+            }
+            temp->next = newNode;
+        }
+    }
+
+    void printAll() const {
+        Node<T>* temp = head;
+        while (temp) {
+            std::cout << temp->data << " ";
+            temp = temp->next;
+        }
+        std::cout << std::endl;
+    }
+
+    void clear() {
+        Node<T>* temp;
+        while (head) {
+            temp = head;
+            head = head->next;
+            delete temp;
+        }
+    }
+
+private:
+    Node<T>* head;
+};
+
+
+template <typename T>
+void swap(DataContainer<T>& a, DataContainer<T>& b) {
+    if (a.size() != b.size()) {
+        throw std::invalid_argument("Containers must have the same size to swap");
+    }
+    for (size_t i = 0; i < a.size(); ++i) {
+        std::swap(a[i], b[i]);
+    }
+}
+
+// Bubble Sort
+template <typename T>
+void bubbleSort(DataContainer<T>& container) {
+    for (size_t i = 0; i < container.size(); ++i) {
+        for (size_t j = 0; j < container.size() - i - 1; ++j) {
+            if (container[j] > container[j + 1]) {
+                std::swap(container[j], container[j + 1]);
+            }
+        }
+    }
+}
+
+template <typename T>
+void selectionSort(DataContainer<T>& container) {
+    for (size_t i = 0; i < container.size(); ++i) {
+        size_t minIndex = i;
+        for (size_t j = i + 1; j < container.size(); ++j) {
+            if (container[j] < container[minIndex]) {
+                minIndex = j;
+            }
+        }
+        std::swap(container[i], container[minIndex]);
+    }
+}
+
+int main() {
+   
+    LinkedList<int> intList;
+    intList.push_back(5);
+    intList.push_back(3);
+    intList.push_back(8);
+    intList.printAll(); 
+    DataContainer<int> intContainer(5);
+    for (size_t i = 0; i < intContainer.size(); ++i) {
+        intContainer[i] = static_cast<int>(i * 2);
+    }
+    std::cout << "Before sorting: ";
+    intContainer.printAll();
+
+    // Bubble sort
+    bubbleSort(intContainer);
+    std::cout << "After bubble sort: ";
+    intContainer.printAll(); 
+
+    // Selection sort
+    selectionSort(intContainer);
+    std::cout << "After selection sort: ";
+    intContainer.printAll();
+
+    return 0;
+}
