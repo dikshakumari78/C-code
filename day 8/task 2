@@ -1,0 +1,24 @@
+#include <iostream>
+#include <stdexcept>
+
+template <typename T>
+T findMaximum(T arr[], int n) {
+    if (n <= 0) {
+        throw std::invalid_argument("Array size must be greater than zero.");
+    }
+    
+    T max = arr[0];
+    for (int i = 1; i < n; ++i) {
+        if (arr[i] > max) {
+            max = arr[i];
+        }
+    }
+    return max;
+}
+
+int main() {
+    int intArray[] = {32, 16, 19, 21, 35, 49, 52, 36, 50};
+    int intSize = sizeof(intArray) / sizeof(intArray[0]);
+    std::cout << "Maximum in intArray: " << findMaximum(intArray, intSize) << std::endl;
+    return 0;
+}
