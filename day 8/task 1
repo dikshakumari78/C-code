@@ -1,32 +1,37 @@
 #include <iostream>
+#include <stdexcept> 
+using namespace std;
 
-template<typename T>
-T findMinimum(T arr[], int n)
-{
-    T min = arr[0];
-    for(int i = 1; i<n; i++)
-    {
-        if(arr[i]<min){
-            min=arr[i];
+template <typename T>
+T findMinimum(const T* array, size_t n) {
+    if (n == 0) {
+        throw std::invalid_argument("Array size must be greater than 0");
+    }
+T minElement = array[0]; 
+
+    for (size_t i = 1; i < n; ++i) {
+        if (array[i] < minElement) {
+            minElement = array[i]; 
         }
     }
-    return min;
+
+    return minElement;
+}
+
+template <typename T>
+void swap(T* a, T* b) {
+    T temp = *a; 
+    *b = temp; 
 }
 int main(){
-    int intArray[]={7,4,3,2,1};
-    double doubleArray[]={4.5,2.3,1.4,3.2};
-    char charArray[]={'d','i','k','s','h','a'};
-    try {
-        int minInt = findMinimum(intArray,5);
-        std::cout<<"Minimum element in intArray: "<<minInt<<std::endl;
-        double minDouble= findMinimum(doubleArray, 4);
-        std::cout<<"Minimum element in doubleArray: "<<minDouble<<std::endl;
-        char minChar= findMinimum(charArray ,6);
-        std::cout<<"Minimum element in charArray: "<<minChar<<std::endl;
-}
-catch (const std::invalid_argument& e)
-{
-    std::cerr<<"error: "<<e.what()<<std::endl;
-}
-return 0;
+
+    int x = 90;
+    int y = 45;
+cout << "Before swap: x = " << x << ", y = " << y << endl;
+
+    swap(&x, &y);
+
+cout << "After swap: x = " << x << ", y = " << y << endl;
+
+    return 0;
 }
