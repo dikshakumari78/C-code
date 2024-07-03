@@ -1,0 +1,34 @@
+#include<iostream>
+using namespace std;
+//A generic smart pointer class
+template <class T>
+class Smartpointer {
+    T *p;
+    public:
+    Smartpointer(T *ptr = NULL){
+        p = ptr;
+    }
+    //Destructor
+    ~Smartpointer()
+    {
+        delete(p);
+        
+    }
+    //overloading dereferencing operator
+    T & operator * () {
+        return *p;
+    }
+    //Overloading arrow operator so that members of T can be accessed
+    //like a pointer
+    T * operator -> () {
+        return p;
+    }
+};
+
+
+int main() {
+    Smartpointer<int> p(new int());
+    *p = 26;
+    cout << "Value is: " << *p << endl;
+    return 0;
+}
