@@ -1,0 +1,76 @@
+#include <iostream>
+#include <vector>
+#include <string>
+
+class Product {
+protected:
+    int id;
+    std::string name;
+    double price;
+    int quantity;
+
+public:
+    Product(int id, const std::string& name, double price, int quantity)
+        : id(id), name(name), price(price), quantity(quantity) {}
+
+    virtual ~Product() {}
+
+    virtual void display() const = 0;  
+    virtual void updateQuantity(int quantity) = 0;
+    virtual void updatePrice(double price) = 0;
+};
+
+// Derived class for perishable products
+class PerishableProduct : public Product {
+private:
+    std::string expiryDate;
+
+public:
+    PerishableProduct(int id, const std::string& name, double price, int quantity, const std::string& expiryDate)
+        : Product(id, name, price, quantity), expiryDate(expiryDate) {}
+
+    void display() const override {
+        std::cout << "ID: " << id << ", Name: " << name << ", Price: " << price
+                  << ", Quantity: " << quantity << ", Expiry Date: " << expiryDate << std::endl;
+    }
+
+    void updateQuantity(int quantity) override {
+        this->quantity = quantity;
+    }
+
+    void updatePrice(double price) override {
+        this->price = price;
+    }
+};
+
+// Inventory class managing a collection of products
+class Inventory {
+private:
+    std::vector<Product*> products;
+
+public:
+    ~Inventory() {
+        for (auto product : products) {
+            delete product;
+        }
+    }
+
+    void addProduct(Product* product) {
+        products.push_back(product);
+    }
+
+    void listProducts() const {
+        for (const auto& product : products) {
+            product->display();
+        }
+    }
+};
+
+int main() {
+    Inventory inventory;
+    Product* p1 = new PerishableProduct(1, "Milk", 1.99, 50, "2024-07-15");
+    inventory.addProduct(p1);
+    inventory.listProducts();
+
+    return 0;
+}
