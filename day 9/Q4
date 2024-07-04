@@ -1,0 +1,29 @@
+#include <iostream>
+#include <string>
+class Shape {
+protected:
+    std::string color;
+
+public:
+    Shape(const std::string& c) : color(c) {}
+    virtual ~Shape() {
+        std::cout << "Shape destructor called.\n";
+    }
+};
+class Circle : public Shape {
+private:
+    double radius;
+
+public:
+    Circle(const std::string& c, double r) : Shape(c), radius(r) {}
+    ~Circle() {
+        std::cout << "Circle destructor called.\n";
+    }
+};
+int main() {
+    Circle c("Red", 8.0);  
+    Shape& s = c;         
+    delete &s;
+
+    return 0;
+}
