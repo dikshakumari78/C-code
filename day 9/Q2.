@@ -1,0 +1,41 @@
+/******************************************************************************
+
+                              Online C++ Compiler.
+               Code, Compile, Run and Debug C++ program online.
+Write your code in this editor and press "Run" button to compile and execute it.
+
+*******************************************************************************/
+
+#include <iostream>
+class Animal {
+    public:
+    virtual void makesound() const = 0;
+    virtual ~Animal() {}
+    
+};
+class Dog : public Animal {
+    public: 
+    void makesound() const override {
+        std::cout<<"wooof\n";
+    }
+};
+class Cat: public Animal {
+    public:
+    void makesound() const override {
+        std::cout<<"Meeooowww\n";
+    }
+};
+void playAnimalSound(const Animal& animal) {
+    animal.makesound();
+}
+
+int main()
+{
+    Dog dog;
+    Cat cat;   
+     
+    playAnimalSound(dog);
+    playAnimalSound(cat);
+
+    return 0;
+}
