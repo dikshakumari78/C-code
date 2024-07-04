@@ -1,0 +1,47 @@
+#include <iostream>
+#include <typeinfo> 
+class Shape {
+public:
+    virtual ~Shape() {} 
+
+    virtual void printType() const {
+        std::cout << "It is a Shape.\n";
+    }
+};
+class Circle : public Shape {
+public:
+    void printType() const override {
+        std::cout << "It is a Circle.\n";
+    }
+};
+class Square : public Shape {
+public:
+    void printType() const override {
+        std::cout << "It is a Square.\n";
+    }
+};
+void identifyObject(const Shape& obj) {
+    if (typeid(obj) == typeid(Circle)) {
+        std::cout << "Identify the  object as a Circle.\n";
+        const Circle& circleObj = dynamic_cast<const Circle&>(obj); 
+        circleObj.printType();
+    } else if (typeid(obj) == typeid(Square)) {
+        std::cout << "Identify object as a Square.\n";
+        const Square& squareObj = dynamic_cast<const Square&>(obj); 
+        squareObj.printType();
+    } else {
+        std::cout << "Identify object as a Shape (default).\n";
+        obj.printType();  
+    }
+}
+
+int main() {
+    Square square;
+    Circle circle;
+    Shape shape;
+    identifyObject(square);
+    identifyObject(circle);
+    identifyObject(shape);
+
+    return 0;
+}
