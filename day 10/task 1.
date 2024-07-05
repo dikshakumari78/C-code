@@ -1,0 +1,39 @@
+#include <iostream>
+#include <exception>
+class File {
+public:
+    virtual void readData() = 0;
+    virtual ~File() = default;   
+};
+class TextFile : public File {
+public:
+    void readData() override {
+        std::cout << "Read data from  text file." << std::endl;
+        throw std::runtime_error("Text file read error.");
+    }
+};
+class ImageFile : public File {
+public:
+    void readData() override {
+        std::cout << "Read data from image file." << std::endl;
+        throw std::runtime_error("Image file read error.");
+    }
+};
+void processFile(File* file) {
+    try {
+        file->readData();
+    } catch (const std::exception& e) {
+        std::cerr << "Error reading file: " << e.what() << std::endl;
+    }
+}
+
+int main() {
+    TextFile textFile;
+    ImageFile imageFile;
+    std::cout << "Process text file:" << std::endl;
+    processFile(&textFile);
+    std::cout << "Process image file:" << std::endl;
+    processFile(&imageFile);
+
+    return 0;
+}
