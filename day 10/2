@@ -1,0 +1,25 @@
+#include<iostream>
+#include<algorithm>
+#include<vector>
+using namespace std;
+void assign(int& v)
+{
+    static int n = 1; v = n++;
+}
+//print out each element
+void print(int v)
+{
+    cout<<v<<" ";
+}
+int main()
+{
+    vector<int> vec(10);
+    //output initial value of each elememt
+    for_each(vec.begin(), vec.end(), print);
+    cout<<endl;
+    //asign a value to each elememt of a vector
+    for_each(vec.begin(), vec.end(), assign);
+    //output updated value of each elememt
+    for_each(vec.begin(), vec.end(), print);
+    return 0;
+}
