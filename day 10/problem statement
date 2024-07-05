@@ -1,0 +1,27 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+std::vector<int> filter_even_odds(const std::vector<int>& numbers, bool is_even) {
+    std::vector<int> filtered_numbers;
+    auto filter = [is_even](int num) {
+    return is_even ? (num % 2 == 0) : (num % 2 != 0);
+    };
+    std::copy_if(numbers.begin(), numbers.end(), std::back_inserter(filtered_numbers), filter);
+     return filtered_numbers;
+}
+int main() {
+    std::vector<int> numbers = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    std::vector<int> evens = filter_even_odds(numbers, true);
+    std::cout << "Even numbers: ";
+    for (int num : evens) {
+    std::cout << num << " ";
+    }
+    std::cout << std::endl;
+    std::vector<int> odds = filter_even_odds(numbers, false);
+    std::cout << "Odd numbers: ";
+    for (int num : odds) {
+    std::cout << num << " ";
+    }
+    std::cout << std::endl;
+    return 0;
+}
