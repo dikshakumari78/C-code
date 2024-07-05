@@ -1,0 +1,52 @@
+#include <iostream>
+#include <memory>
+class Chair {
+public:
+    virtual void sitOn() const = 0;
+    virtual ~Chair() = default;     
+};
+class ModernChair : public Chair {
+public:
+    void sitOn() const override {
+        std::cout << "Sitting on a modern chair." << std::endl;
+    }
+};
+class ClassicChair : public Chair {
+public:
+    void sitOn() const override {
+        std::cout << "Sitting on a classic chair." << std::endl;
+    }
+};
+class FurnitureFactory {
+public:
+    virtual Chair* createChair() const = 0; 
+    virtual ~FurnitureFactory() = default;
+};
+class ModernFurnitureFactory : public FurnitureFactory {
+public:
+    Chair* createChair() const override {
+        return new ModernChair();
+    }
+};
+class ClassicFurnitureFactory : public FurnitureFactory {
+public:
+    Chair* createChair() const override {
+        return new ClassicChair();
+    }
+};
+void createAndUseChair(const FurnitureFactory& factory) {
+    Chair* chair = factory.createChair();
+    chair->sitOn();
+    delete chair; 
+}
+
+int main() {
+    ModernFurnitureFactory modernFactory;
+    ClassicFurnitureFactory classicFactory;
+    std::cout << "Creat a modern furniture:" << std::endl;
+    createAndUseChair(modernFactory);
+    std::cout << "Creat a classic furniture:" << std::endl;
+    createAndUseChair(classicFactory);
+
+    return 0;
+}
