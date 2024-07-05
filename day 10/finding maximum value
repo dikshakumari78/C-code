@@ -1,0 +1,30 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+template <typename T, typename Compare>
+T find_max(const std::vector<T>& objects, Compare compare) {
+    if (objects.empty()) {
+        throw std::invalid_argument("The objects vector is empty");
+    }
+    return *std::max_element(objects.begin(), objects.end(), compare);
+}
+
+int main() {
+    std::vector<int> numbers = {1, 5, 3, 9, 2};
+    int max_number = find_max(numbers, [](const int& a, const int& b) {
+        return a < b;
+    });
+    std::cout << "Max number: " << max_number << std::endl;
+    struct Person {
+        std::string name;
+        int age;
+    };
+
+    std::vector<Person> people = {{"ritik", 30}, {"Boby", 25}, {"georg", 35}};
+    Person oldest = find_max(people, [](const Person& a, const Person& b) {
+        return a.age < b.age; 
+    });
+    std::cout << "Oldest person: " << oldest.name << " (" << oldest.age << ")" << std::endl;
+
+    return 0;
+}
