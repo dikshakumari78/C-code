@@ -1,0 +1,206 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <algorithm>
+#include <limits>
+using namespace std;
+struct Flight {
+string flightNumber;
+string departureAirport;
+string arrivalAirport;
+string departureDateTime;
+string arrivalDateTime;
+int availableSeats;
+float pricePerSeat;
+};
+struct Passenger {
+string name;
+string passportNumber;
+vector<string> bookedFlights;
+};
+void addFlight(vector<Flight>& flights);
+void displayFlights(const vector<Flight>& flights);
+void searchFlights(const vector<Flight>& flights);
+void bookSeats(vector<Flight>& flights, Passenger& passenger);
+void cancelBooking(vector<Flight>& flights, Passenger& passenger);
+void displayBookedFlights(const Passenger& passenger);
+void handleInvalidInput();
+int main() {
+vector<Flight> flights;
+Passenger passenger;  
+int choice;
+while (true) {
+    cout << "\nFlight Booking System\n";
+    cout << "1. Add Flight\n";
+    cout << "2. Display Flights\n";
+    cout << "3. Search Flights\n";
+    cout << "4. Book Seats\n";
+    cout << "5. Cancel Booking\n";
+    cout << "6. Display Booked Flights\n";
+    cout << "7. Exit\n";
+    cout << "Enter your choice: ";
+    cin >> choice;
+if (cin.fail()) {
+handleInvalidInput();
+continue;
+}
+switch (choice) {
+case 1:
+ addFlight(flights);
+    break;
+    case 2:
+    displayFlights(flights);
+    break;
+    case 3:
+    searchFlights(flights);
+    break;
+    case 4:
+    bookSeats(flights, passenger);
+    break;
+    case 5:
+    cancelBooking(flights, passenger);
+    break;
+    case 6:
+    displayBookedFlights(passenger);
+    break;
+    case 7:
+    cout << "Exiting...\n";
+    return 0;
+    default:
+    cout << "Invalid choice. Please try again.\n";
+    }
+}
+  return 0;
+}
+void addFlight(vector<Flight>& flights) {
+Flight newFlight;
+cout << "Enter flight number: ";
+cin >> newFlight.flightNumber;
+cout << "Enter departure airport: ";
+cin >> newFlight.departureAirport;
+cout << "Enter arrival airport: ";
+cin >> newFlight.arrivalAirport;
+cout << "Enter departure date/time (YYYY-MM-DD HH:MM): ";
+cin.ignore();
+getline(cin, newFlight.departureDateTime);
+cout << "Enter arrival date/time (YYYY-MM-DD HH:MM): ";
+getline(cin, newFlight.arrivalDateTime);
+cout << "Enter number of available seats: ";
+cin >> newFlight.availableSeats;
+cout << "Enter price per seat: ";
+cin >> newFlight.pricePerSeat;
+flights.push_back(newFlight);
+cout << "Flight added successfully!\n";
+}
+void displayFlights(const vector<Flight>& flights) {
+if (flights.empty()) {
+ cout << "No flights available.\n";
+ return;
+  }
+    for (const auto& flight : flights) {
+    cout << "\nFlight Number: " << flight.flightNumber
+     << "\nDeparture Airport: " << flight.departureAirport
+     << "\nArrival Airport: " << flight.arrivalAirport
+     << "\nDeparture Date/Time: " << flight.departureDateTime
+     << "\nArrival Date/Time: " << flight.arrivalDateTime
+     << "\nAvailable Seats: " << flight.availableSeats
+     << "\nPrice per Seat: $" << flight.pricePerSeat << "\n";
+ }
+}
+void searchFlights(const vector<Flight>& flights) {
+  string origin, destination, startDate, endDate;
+  cout << "Enter origin airport: ";
+  cin >> origin;
+  cout << "Enter destination airport: ";
+  cin >> destination;
+  cout << "Enter start date: ";
+  cin.ignore();
+  getline(cin, startDate);
+  cout << "Enter end date: ";
+   getline(cin, endDate);
+  bool found = false;
+    for (const auto& flight : flights) {
+    if (flight.departureAirport == origin && flight.arrivalAirport == destination &&
+    flight.departureDateTime >= startDate && flight.departureDateTime <= endDate) {
+    cout << "\nFlight Number: " << flight.flightNumber
+     << "\nDeparture Airport: " << flight.departureAirport
+     << "\nArrival Airport: " << flight.arrivalAirport
+     << "\nDeparture Date/Time: " << flight.departureDateTime
+     << "\nArrival Date/Time: " << flight.arrivalDateTime
+     << "\nAvailable Seats: " << flight.availableSeats
+     << "\nPrice per Seat: $" << flight.pricePerSeat << "\n";
+    found = true;
+    }
+}
+if (found) {
+    cout << "No flights found for the given criteria.\n";
+}
+}
+void bookSeats(vector<Flight>& flights, Passenger& passenger) {
+string flightNumber;
+int seatsToBook;
+cout << "Enter flight number to book seats: ";
+cin >> flightNumber;
+cout << "Enter number of seats to book: ";
+cin >> seatsToBook;
+if (cin.fail() || seatsToBook <= 0) {
+handleInvalidInput();
+ return;
+}
+for (auto& flight : flights) {
+if (flight.flightNumber == flightNumber) {
+if (flight.availableSeats >= seatsToBook) {
+ flight.availableSeats -= seatsToBook;
+passenger.bookedFlights.push_back(flightNumber);
+cout << "Seats booked successfully! Remaining seats: " << flight.availableSeats << "\n";
+}
+else {
+ cout << "Insufficient seats available.\n";
+}
+return;
+}
+}
+cout << "Flight not found.\n";
+}
+void cancelBooking(vector<Flight>& flights, Passenger& passenger) {
+string flightNumber;
+int seatsToCancel;
+cout << "Enter flight number to cancel booking: ";
+cin >> flightNumber;
+cout << "Enter number of seats to cancel: ";
+cin >> seatsToCancel;
+if (cin.fail() || seatsToCancel <= 0) {
+handleInvalidInput();
+return;
+}
+auto it = find(passenger.bookedFlights.begin(), passenger.bookedFlights.end(), flightNumber);
+if (it != passenger.bookedFlights.end()) {
+for (auto& flight : flights) {
+if (flight.flightNumber == flightNumber) {
+flight.availableSeats += seatsToCancel;
+passenger.bookedFlights.erase(it);
+cout << "Booking canceled successfully! Remaining seats: " << flight.availableSeats << "\n";
+  return;
+ }
+}
+}
+else
+{
+cout << "No booking found for the specified flight.\n";
+    }
+}
+void displayBookedFlights(const Passenger& passenger) {
+  if (passenger.bookedFlights.empty()) {
+  cout << "No booked flights.\n";
+ return;
+    }
+cout << "Booked Flights for " << passenger.name << ":\n";
+for (const auto& flightNumber : passenger.bookedFlights) {
+cout << flightNumber << "\n";
+ }
+}
+void handleInvalidInput() {
+cin.clear(); 
+cin.ignore(numeric_limits<streamsize>::max(), '\n');
+cout << "Invalid input. Please try again.\n";
+}
