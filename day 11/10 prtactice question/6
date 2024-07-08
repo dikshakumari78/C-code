@@ -1,14 +1,9 @@
 #include <iostream>
-using namespace std;
 int main() {
-    int num = 42;
-    int* ptr = &num;
-    float* fPtr = reinterpret_cast<float*>(ptr);
-    cout << "Address of num: " << &num << endl;
-    cout << "Address stored in ptr: " << ptr << endl;
-    cout << "Address stored in fPtr: " << fPtr << endl;
-    cout << "Value at ptr: " << *ptr << endl;
-    cout << "Value at fPtr (interpreted as float): " << *fPtr << endl;
+    int x = 10;
+    int &refX = x;            
+    float &refF = reinterpret_cast<float&>(refX);  
+    std::cout << "Value of x: " << x << std::endl;
+    std::cout << "Value of refF (interpreted from refX): " << refF << std::endl;
+return 0;
 
-    return 0;
-}
