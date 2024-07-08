@@ -1,0 +1,11 @@
+#include <iostream>
+using namespace std;
+int main() {
+    int x = 256;
+    char y;
+    y = static_cast<char>(x);
+
+    cout << "Value of y: " << static_cast<int>(y) << endl;
+
+    return 0;
+}
