@@ -1,0 +1,9 @@
+#include <iostream>
+int main() {
+    int x = 10;
+    int &refX = x;            
+    float &refF = reinterpret_cast<float&>(refX);  
+    std::cout << "Value of x: " << x << std::endl;
+    std::cout << "Value of refF (interpreted from refX): " << refF << std::endl;
+return 0;
+}
