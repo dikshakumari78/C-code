@@ -1,0 +1,9 @@
+#include <iostream>
+using namespace std;
+int main() {
+    int a = 23;
+    auto square = [a]() { return a * a; };
+    int result = square();
+    cout << "The square of " << a << " is: " << result << endl;
+    return 0;
+}
