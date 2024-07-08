@@ -1,0 +1,46 @@
+#include <iostream>
+#include <typeinfo> // for dynamic_cast
+
+class Base {
+public:
+    virtual void whoami() {
+        std::cout << "I am a Base class object" << std::endl;
+    }
+    virtual ~Base() {} // Adding virtual destructor for polymorphic behavior
+};
+
+class Derived : public Base {
+public:
+    void whoami() override {
+        std::cout << "I am a Derived class object" << std::endl;
+    }
+};
+
+int main() {
+    // static_cast example (truncating double to int)
+    double num = 3.14159;
+    int integer_part = static_cast<int>(num); // Truncates the decimal
+    std::cout << "Original number: " << num << std::endl;
+    std::cout << "Integer part: " << integer_part << std::endl;
+
+    // Incorrect upcasting (assuming Derived object but not guaranteed)
+    // This could lead to undefined behavior if base_ptr doesn't point to a Derived
+    Base* base_ptr = new Derived(); // Pointer to a Base class (actually pointing to a Derived)
+    Derived* derived_ptr = static_cast<Derived*>(base_ptr); // Attempting to cast to Derived*
+
+    // Safer approach: check the actual type before downcasting
+    if (dynamic_cast<Derived*>(base_ptr) != nullptr) {
+        derived_ptr = static_cast<Derived*>(base_ptr); // Downcast only if safe
+        derived_ptr->whoami(); // Call Derived class's whoami
+    } else {
+        std::cout << "Warning: Base object might not be of type Derived" << std::endl;
+    }
+
+    delete base_ptr; // Release memory
+
+    // Using reinterpret_cast example
+    int value = 10;
+    float* float_ptr = reinterpret_cast<float*>(&value);
+
+    return 0;
+}
