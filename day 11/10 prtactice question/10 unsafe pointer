@@ -1,0 +1,12 @@
+#include <iostream>
+
+int main() {
+    int arr[] = {1, 2, 3, 4, 5};
+    int *ptr = arr;  
+    int unsafe_ptr = reinterpret_cast<int>(reinterpret_cast<char*>(ptr) + 2*sizeof(int));
+
+    std::cout << "Unsafe access: " << *unsafe_ptr << std::endl;
+
+    return 0;
+}
+
