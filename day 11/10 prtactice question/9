@@ -1,0 +1,12 @@
+#include <iostream>
+#include <cmath> 
+int main() {
+    double celsius;
+    std::cout << "Enter the temperature in Celsius: ";
+    std::cin >> celsius;
+    double fahrenheit = static_cast<double>(celsius) * 9.0 / 5.0 + 32.0;
+    int rounded_fahrenheit = static_cast<int>(std::round(fahrenheit));
+    std::cout << "Temperature in Fahrenheit: " << rounded_fahrenheit << std::endl;
+
+    return 0;
+}
