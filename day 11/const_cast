@@ -1,0 +1,16 @@
+#include <iostream>
+void modifyConstant(const int* ptr) {
+int* modifiable_ptr = const_cast<int*>(ptr);
+*modifiable_ptr = 66; 
+}
+int main() {
+int a = 50;
+std::cout << "Before modify Constant: "<<a<<std::endl;
+modifyConstant(&a);
+std::cout << "After modify Constant: "<<a<< std::endl;
+const int b = 70;
+std::cout << "Before modifying const variable y: "<<b<<std::endl;
+modifyConstant(&b);
+std::cout << "After modifying const variable y: "<<b<<std::endl;
+ return 0;
+}
