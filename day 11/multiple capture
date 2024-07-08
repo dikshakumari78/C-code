@@ -1,0 +1,19 @@
+#include <iostream>
+using namespace std;
+int main() {
+    int num = 49;
+    bool cond = true;
+
+    auto lambda = [num, cond]() mutable {
+        if (cond) {
+            num *= 2;
+        } else {
+            num /= 2;
+        }
+        return num;
+    };
+
+    cout << "Result: " << lambda() << endl;
+
+    return 0;
+}
