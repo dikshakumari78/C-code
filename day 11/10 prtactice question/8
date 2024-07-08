@@ -1,9 +1,22 @@
 #include <iostream>
-int main() {
-    int x = 10;
-    int &refX = x;            
-    float &refF = reinterpret_cast<float&>(refX);  
-    std::cout << "Value of x: " << x << std::endl;
-    std::cout << "Value of refF (interpreted from refX): " << refF << std::endl;
-return 0;
+int calculateArea(int width, int height) {
+    return width * height; }
+
+double calculateArea(double width, double height) {
+    return width * height;
 }
+
+int main() {
+    int width_int = 5;
+    int height_int = 3;
+    double width_double = 5.5;
+    double height_double = 3.5;
+    int area_int = calculateArea(width_int, height_int);
+    std::cout << "Area with int arguments: " << area_int << std::endl;
+
+    double area_double = calculateArea(width_double, height_double);
+    std::cout << "Area with double arguments: " << area_double << std::endl;
+
+    return 0;
+}
+
