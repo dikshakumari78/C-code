@@ -1,0 +1,10 @@
+#include <iostream>
+using namespace std;
+int main() {
+    double d = 123.456;
+    int i = static_cast<int>(d);
+    cout << "Original double value: " << d << endl;
+    cout << "Converted int value: " << i << endl;
+
+    return 0;
+}
