@@ -1,0 +1,11 @@
+#include <iostream>
+#include <string>
+int main() {
+  std::string str = "everyone";
+  auto appendPrefix = [&str]() {
+  str = "\nhey, " + str;
+  return str;
+};
+ std::cout << "Modified string: "<<appendPrefix()<<std::endl;
+ return 0;
+}
