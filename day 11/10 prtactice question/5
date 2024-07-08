@@ -1,0 +1,16 @@
+#include <iostream>
+using namespace std;
+int main() {
+    int num = 45;
+    float fval = 2.34;
+    int* intPtr = &num;
+    float* floatPtr = &fval;
+    float* castedPtr = reinterpret_cast<float*>(intPtr);
+    cout << "Address of num: " << &num << endl;
+    cout << "Address stored in intPtr: " << intPtr << endl;
+    cout << "Address stored in castedPtr: " << castedPtr << endl;
+    cout << "Value at intPtr: " << *intPtr << endl;
+    cout << "Value at castedPtr (interpreted as float): " << *castedPtr <<endl;
+
+    return 0;
+}
