@@ -1,0 +1,9 @@
+#include <iostream>
+int main() {
+    auto add = [](int x, int y) {
+        return x + y;
+};
+ int result = add(24, 65);
+ std::cout << "The sum is: "<<result<<std::endl;
+ return 0;
+}
