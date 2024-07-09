@@ -1,0 +1,29 @@
+#include <iostream>
+#include <string>
+#include <vector>
+class Task {
+public:
+    std::string description;
+    int priority;
+    std::string due_date;
+
+    Task(const std::string& desc, int prio, const std::string& due)
+    : description(desc), priority(prio), due_date(due) {
+   std::cout << "Created Task: " << description << std::endl;
+    }
+    Task(const Task& other)
+    : description(other.description), priority(other.priority), due_date(other.due_date) {
+    std::cout << "Task Copied: " << description << std::endl;
+    }
+};
+
+int main() {
+    std::vector<Task> tasks;
+    Task preCreatedTask("Finish report", 1, "2024-07-10");
+    tasks.insert(tasks.begin(), preCreatedTask);
+    tasks.insert(tasks.end(), preCreatedTask);  
+    tasks.emplace(tasks.begin(), "Start project", 2, "2024-08-01");
+    tasks.emplace_back("Complete assignment", 3, "2024-07-15");
+
+    return 0;
+}
