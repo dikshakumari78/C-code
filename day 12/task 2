@@ -1,0 +1,102 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <algorithm>
+
+struct Student {
+    std::string name;
+    int id;
+    std::vector<int> scores;
+
+    Student(const std::string& n, int i) : name(n), id(i) {}
+};
+
+class ExamManager {
+private:
+    std::vector<Student> students;
+
+public:
+    void addStudent(const std::string& name, int id, int score) {
+        Student newStudent(name, id);
+        newStudent.scores.push_back(score);
+        students.push_back(newStudent);
+    }
+
+    void findStudentByName(const std::string& name) {
+        for (const auto& student : students) {
+            if (student.name == name) {
+                std::cout << "Student found: " << student.name << " (ID: " << student.id << ")\n";
+                return;
+            }
+        }
+        std::cout << "Student not found.\n";
+    }
+
+    void findStudentByID(int id) {
+        for (const auto& student : students) {
+            if (student.id == id) {
+                std::cout << "Student found: " << student.name << " (ID: " << student.id << ")\n";
+                return;
+            }
+        }
+        std::cout << "Student not found.\n";
+    }
+
+    void calculateAverageScore(const std::string& name) {
+        for (const auto& student : students) {
+            if (student.name == name) {
+                int sum = 0;
+                for (int score : student.scores) {
+                    sum += score;
+                }
+                double average = static_cast<double>(sum) / student.scores.size();
+                std::cout << "Average score for " << student.name << ": " << average << "\n";
+                return;
+            }
+        }
+        std::cout << "Student not found.\n";
+    }
+
+    void calculateClassAverage() {
+        int totalSum = 0;
+        int totalScores = 0;
+        for (const auto& student : students) {
+            for (int score : student.scores) {
+                totalSum += score;
+                totalScores++;
+            }
+        }
+        double classAverage = static_cast<double>(totalSum) / totalScores;
+        std::cout << "Class average score: " << classAverage << "\n";
+    }
+
+    void modifyStudentScore(const std::string& name, int newScore) {
+        for (auto& student : students) {
+            if (student.name == name) {
+                student.scores.push_back(newScore);
+                std::cout << "Score updated for " << student.name << ".\n";
+                return;
+            }
+        }
+        std::cout << "Student not found.\n";
+    }
+};
+
+int main() {
+    ExamManager manager;
+
+    manager.addStudent("John Doe", 1, 80);
+    manager.addStudent("Jane Smith", 2, 90);
+    manager.addStudent("Bob Johnson", 3, 70);
+
+    manager.findStudentByName("Jane Smith");
+    manager.findStudentByID(2);
+
+    manager.calculateAverageScore("John Doe");
+    manager.calculateClassAverage();
+
+    manager.modifyStudentScore("Jane Smith", 95);
+    manager.calculateAverageScore("Jane Smith");
+
+    return 0;
+}
