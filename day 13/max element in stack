@@ -1,0 +1,57 @@
+#include <iostream>
+#include <stack>
+#include <stdexcept>
+using namespace std;
+
+class MaxStack {
+private:
+    stack<int> mainStack;
+    stack<int> maxStack;
+
+public:
+    void push(int x) {
+        mainStack.push(x);
+        if (maxStack.empty() || x >= maxStack.top()) {
+            maxStack.push(x);
+        }
+    }
+    void pop() {
+        if (mainStack.empty()) {
+            throw out_of_range("Stack is empty");
+        }
+        if (mainStack.top() == maxStack.top()) {
+            maxStack.pop();
+        }
+        mainStack.pop();
+    }
+    int top() {
+        if (mainStack.empty()) {
+            throw out_of_range("Stack is empty");
+        }
+        return mainStack.top();
+    }
+    int getMax() {
+        if (maxStack.empty()) {
+            throw out_of_range("Stack is empty");
+        }
+        return maxStack.top();
+    }
+
+    
+};
+
+int main() {
+    MaxStack s;
+    s.push(3);
+    s.push(5);
+    cout << "Max: " << s.getMax() << endl; 
+    s.push(7);
+    s.push(19);
+    cout << "Max: " << s.getMax() << endl; 
+    s.pop();
+    cout << "Max: " << s.getMax() << endl; 
+    s.pop();
+    cout << "Max: " << s.getMax() << endl; 
+
+    return 0;
+}
