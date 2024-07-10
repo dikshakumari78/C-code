@@ -1,0 +1,43 @@
+#include <iostream>
+#include <queue>
+#include <stack>
+using namespace std;
+void reverseQueue(queue<int>& q) {
+    stack<int> s;
+    while (!q.empty()) {
+        s.push(q.front());
+        q.pop();
+    }
+    while (!s.empty()) {
+        q.push(s.top());
+        s.pop();
+    }
+}
+
+int main() {
+    queue<int> myqueue;
+    myqueue.push(1);
+    myqueue.push(2);
+    myqueue.push(3);
+    myqueue.push(4);
+    myqueue.push(5);
+
+    cout << "Original queue: ";
+    queue<int> temp = myqueue;
+    while (!temp.empty()) {
+        cout << temp.front() << " ";
+        temp.pop();
+    }
+    cout << endl;
+
+    reverseQueue(myqueue);
+
+    cout << "Reversed queue: ";
+    while (!myqueue.empty()) {
+        cout << myqueue.front() << " ";
+        myqueue.pop();
+    }
+    cout << endl;
+
+    return 0;
+}
