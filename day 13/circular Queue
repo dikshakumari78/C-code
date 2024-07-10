@@ -1,0 +1,78 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+class CircularQueue {
+private:
+    std::vector<int> queue;
+    int head;
+    int tail;
+    int max_size;
+
+public:
+    CircularQueue(int k) : queue(k), head(-1), tail(-1), max_size(k) {}
+
+    bool enqueue(int value) {
+        if ((tail + 1) % max_size == head) {
+            return false; 
+        }
+        if (head == -1) {
+            head = 0;
+        }
+        tail = (tail + 1) % max_size;
+        queue[tail] = value;
+        return true;
+    }
+
+    bool dequeue() {
+        if (head == -1) {
+            return false; 
+        }
+        if (head == tail) {
+            head = tail = -1; 
+        } else {
+            head = (head + 1) % max_size;
+        }
+        return true;
+    }
+
+    int front() {
+        if (head == -1) {
+            return -1; 
+        }
+        return queue[head];
+    }
+
+    bool isEmpty() {
+        return head == -1;
+    }
+
+    bool isFull() {
+        return (tail + 1) % max_size == head;
+    }
+};
+
+int main() {
+    CircularQueue q(5); 
+
+    q.enqueue(1);
+    q.enqueue(2);
+    q.enqueue(3);
+    q.enqueue(4);
+    q.enqueue(5);
+
+    std::cout << "Front element: " << q.front() << std::endl; 
+
+    q.dequeue();
+    std::cout << "Front element after dequeue: " << q.front() << std::endl; 
+
+    q.enqueue(6);
+    std::cout << "Front element after enqueue 6: " << q.front() << std::endl; 
+
+    while (!q.isEmpty()) {
+        std::cout << q.front() << " ";
+        q.dequeue();
+    }
+    std::cout << std::endl;
+
+    return 0;
+}
