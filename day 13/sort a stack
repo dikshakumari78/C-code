@@ -1,0 +1,51 @@
+#include <stack>
+#include <iostream>
+
+void sortStack(std::stack<int>& stack) {
+    std::stack<int> tempStack;
+
+    while (!stack.empty()) {
+        int temp = stack.top();
+        stack.pop();
+
+        while (!tempStack.empty() && tempStack.top() > temp) {
+            stack.push(tempStack.top());
+            tempStack.pop();
+        }
+
+        tempStack.push(temp);
+    }
+
+    while (!tempStack.empty()) {
+        stack.push(tempStack.top());
+        tempStack.pop();
+    }
+}
+
+void printStack(std::stack<int> stack) {
+    while (!stack.empty()) {
+        std::cout << stack.top() << " ";
+        stack.pop();
+    }
+    std::cout << std::endl;
+}
+
+int main() {
+    std::stack<int> stack;
+    stack.push(34);
+    stack.push(3);
+    stack.push(31);
+    stack.push(98);
+    stack.push(92);
+    stack.push(23);
+
+    std::cout << "Original Stack: ";
+    printStack(stack);
+
+    sortStack(stack);
+
+    std::cout << "Sorted Stack: ";
+    printStack(stack);
+
+    return 0;
+}
