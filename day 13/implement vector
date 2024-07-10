@@ -1,0 +1,180 @@
+#include <iostream>
+#include <stdexcept>
+class template <typename T>
+class Vector {
+private:
+    T* data;
+    size_t capacity;
+    size_t length;
+void resize(size_t new_capacity) {
+    T* new_data = new T[new_capacity];
+    for (size_t i = 0; i < length; ++i) new_data[i] = data[i];
+    delete[] data;
+    data = new_data;
+    capacity = new_capacity;
+    }
+
+public:
+    Vector() : data(nullptr), capacity(0), length(0) {}
+    ~Vector() { delete[] data; }
+    size_t size() const { return length; }
+    bool empty() const { return length == 0; }
+
+    T& operator[](size_t index) {
+    if (index >= length) throw std::out_of_range("Index out of range");
+    return data[index];
+    }
+
+    const T& operator[](size_t index) const {
+    if (index >= length) throw std::out_of_range("Index out of range");
+    return data[index];
+    }
+
+    void push_back(const T& value) {
+    if (length == capacity) resize(capacity == 0 ? 1 : capacity * 2);
+    data[length++] = value;
+    }
+
+    void pop_back() {
+    if (length == 0) throw std::out_of_range("Vector is empty");
+    --length;
+    }
+
+    void clear() { length = 0; }
+};
+
+// Vector2 class
+template <typename T>
+class Vector2 {
+private:
+    T* data;
+    size_t capacity;
+    size_t length;
+void resize(size_t new_capacity) {
+    T* new_data = new T[new_capacity];
+for (size_t i = 0; i < length; ++i) new_data[i] = data[i];
+    delete[] data;
+    data = new_data;
+    capacity = new_capacity;
+    }
+
+public:
+    Vector2() : data(nullptr), capacity(0), length(0) {}
+    ~Vector2() { delete[] data; }
+
+    size_t size() const { return length; }
+    bool empty() const { return length == 0; }
+
+    T& operator[](size_t index) {
+    if (index >= length) throw std::out_of_range("Index out of range");
+    return data[index];
+    }
+
+    const T& operator[](size_t index) const {
+    if (index >= length) throw std::out_of_range("Index out of range");
+    return data[index];
+    }
+
+    void push_back(const T& value) {
+    if (length == capacity) resize(capacity == 0 ? 1 : capacity * 2);
+    data[length++] = value;
+    }
+
+    void pop_back() {
+    if (length == 0) throw std::out_of_range("Vector is empty");
+    --length;
+    }
+
+    void clear() { length = 0; }
+};
+
+// Vector3 class
+template <typename T>
+class Vector3 {
+private:
+    T* data;
+    size_t capacity;
+    size_t length;
+
+    void resize(size_t new_capacity) {
+    T* new_data = new T[new_capacity];
+    for (size_t i = 0; i < length; ++i) new_data[i] = data[i];
+    delete[] data;
+    data = new_data;
+    capacity = new_capacity;
+    }
+
+public:
+    Vector3() : data(nullptr), capacity(0), length(0) {}
+    ~Vector3() { delete[] data; }
+
+    size_t size() const { return length; }
+    bool empty() const { return length == 0; }
+
+    T& operator[](size_t index) {
+    if (index >= length) throw std::out_of_range("Index out of range");
+    return data[index];
+    }
+
+    const T& operator[](size_t index) const {
+    if (index >= length) throw std::out_of_range("Index out of range");
+    return data[index];
+    }
+
+    void push_back(const T& value) {
+    if (length == capacity) resize(capacity == 0 ? 1 : capacity * 2);
+    data[length++] = value;
+    }
+
+    void pop_back() {
+    if (length == 0) throw std::out_of_range("Vector is empty");
+    --length;
+    }
+
+    void clear() { length = 0; }
+};
+
+int main() {
+    Vector<int> vec1;
+    vec1.push_back(1);
+    vec1.push_back(2);
+    vec1.push_back(3);
+    std::cout << "Vector1 elements: ";
+    for (size_t i = 0; i < vec1.size(); ++i) std::cout << vec1[i] << " ";
+    std::cout << std::endl;
+    vec1.pop_back();
+    std::cout << "After pop_back Vector1: ";
+    for (size_t i = 0; i < vec1.size(); ++i) std::cout << vec1[i] << " ";
+    std::cout << std::endl;
+    vec1.clear();
+    std::cout << "After clear, size of Vector1: " << vec1.size() << std::endl;
+    Vector2<int> vec2;
+    vec2.push_back(4);
+    vec2.push_back(5);
+    vec2.push_back(6);
+
+    std::cout << "Vector2 elements: ";
+    for (size_t i = 0; i < vec2.size(); ++i) std::cout << vec2[i] << " ";
+    std::cout << std::endl;
+    vec2.pop_back();
+    std::cout << "After pop_back Vector2: ";
+    for (size_t i = 0; i < vec2.size(); ++i) std::cout << vec2[i] << " ";
+    std::cout << std::endl;
+   vec2.clear();
+    std::cout << "After clear, size of Vector2: " << vec2.size() << std::endl;
+    Vector3<int> vec3;
+    vec3.push_back(7);
+    vec3.push_back(8);
+    vec3.push_back(9);
+   std::cout << "Vector3 elements: ";
+    for (size_t i = 0; i < vec3.size(); ++i) std::cout << vec3[i] << " ";
+    std::cout << std::endl;
+    vec3.pop_back();
+    std::cout << "After pop_back Vector3: ";
+    for (size_t i = 0; i < vec3.size(); ++i) std::cout << vec3[i] << " ";
+    std::cout << std::endl;
+    vec3.clear();
+    std::cout << "After clear, size of Vector3: " << vec3.size() << std::endl;
+    return 0;
+}
+ sir jo abhi diye the may be yhi question tha
