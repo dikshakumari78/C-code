@@ -1,0 +1,57 @@
+#include <iostream>
+#include <stack>
+#include <sstream>
+#include <string>
+bool isOperator(const char& token) {
+return token == '+'||token == '-'||token == '*'||token == '/';
+}
+float applyOperation(const char& operation, float operand1, float operand2) {
+    switch (operation) {
+    case '+': return operand1 + operand2;
+    case '-': return operand1 - operand2;
+    case '*': return operand1 * operand2;
+    case '/': return operand1 / operand2;
+    default: throw std::invalid_argument("Invalid operation");
+    }
+}
+float evaluatePostfixExpression(const std::string& expression) {
+    std::stack<float> stack;
+    std::istringstream tokens(expression);
+    std::string token;
+
+    while (tokens >> token) {
+    if (isOperator(token[0]) && token.size() == 1) {
+    if (stack.size() < 2) {
+    throw std::invalid_argument("Invalid postfix expression");
+    }
+    float operand2 = stack.top(); stack.pop();
+    float operand1 = stack.top(); stack.pop();
+    float result = applyOperation(token[0], operand1, operand2);
+    stack.push(result);
+    } 
+    else {
+    stack.push(std::stof(token));
+    }
+}
+
+    if (stack.size() != 1) {
+    throw std::invalid_argument("Invalid postfix expression");
+    }
+return stack.top();
+}
+void processPostfixExpression() {
+    std::string postfixExpression;
+    std::cout << "Enter a postfix expression: ";
+    std::getline(std::cin, postfixExpression);
+
+    try {
+    float result = evaluatePostfixExpression(postfixExpression);
+    std::cout << "The result of the evaluation is: " << result << std::endl;
+    } catch (const std::exception& e) {
+    std::cout << "Error: " << e.what() << std::endl;
+    }
+}
+int main() {
+    processPostfixExpression();
+    return 0;
+}
