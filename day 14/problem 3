@@ -1,0 +1,55 @@
+#include <iostream>
+#include <queue>
+
+class TicketingSystem {
+public:
+void addCustomer(const std::string& customer) {
+    customerQueue.push(customer);
+    std::cout << "Add customer: " << customer << std::endl;
+}
+
+void serveCustomer() {
+if (!customerQueue.empty()) {
+std::cout << "Serving customer: " << customerQueue.front() << std::endl;
+customerQueue.pop();
+customersServed++;
+}
+else {
+std::cout << "No customers to serve." << std::endl;
+ }
+}
+
+void displayQueue() const {
+std::queue<std::string> tempQueue = customerQueue;
+std::cout << "Current queue: ";
+while (!tempQueue.empty()) {
+std::cout << tempQueue.front() << " ";
+tempQueue.pop();
+ }
+std::cout << std::endl;
+}
+
+void displayServedCount() const {
+std::cout << "Number of customers served: " << customersServed << std::endl;
+ }
+
+private:
+    std::queue<std::string> customerQueue;
+    int customersServed = 0;
+};
+
+int main() {
+    TicketingSystem ticketingSystem;
+    ticketingSystem.addCustomer("Customer 1");
+    ticketingSystem.addCustomer("Customer 2");
+    ticketingSystem.addCustomer("Customer 3");
+ std::cout << "Current state of the queue:" << std::endl;
+    ticketingSystem.displayQueue();
+    ticketingSystem.serveCustomer();
+    ticketingSystem.serveCustomer();
+ std::cout << "Current state of the queue after serving some customers:" << std::endl;
+    ticketingSystem.displayQueue();
+    ticketingSystem.displayServedCount();
+
+    return 0;
+}
