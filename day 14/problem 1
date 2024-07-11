@@ -1,0 +1,79 @@
+#include <iostream>
+#include <list>
+#include <algorithm>
+
+class ListManager {
+public:
+    void insertFront(int value) {
+    myList.push_front(value);
+    }
+
+    void insertBack(int value) {
+    myList.push_back(value);
+    }
+
+    void removeFront() {
+    if (!myList.empty()) {
+    myList.pop_front();
+    }
+}
+
+    void removeBack() {
+    if (!myList.empty()) {
+    myList.pop_back();
+    }
+}
+
+    void sortAscending() {
+    myList.sort();
+    }
+
+    void sortDescending() {
+    myList.sort(std::greater<int>());
+    }
+
+    void reverseList() {
+    myList.reverse();
+    }
+
+    void displayList() const {
+    for (const int& elem : myList) {
+    std::cout << elem << " ";
+    }
+    std::cout << std::endl;
+    }
+
+private:
+    std::list<int> myList;
+};
+
+int main() {
+ ListManager listManager;
+    listManager.insertFront(120);
+    listManager.insertBack(270);
+    listManager.insertFront(54);
+    listManager.insertBack(256);
+
+    std::cout << "List after inserting elements at front and back:" << std::endl;
+    listManager.displayList();
+
+    listManager.removeFront();
+    listManager.removeBack();
+
+    std::cout << "List after removing elements from front and back:" << std::endl;
+    listManager.displayList();
+
+    listManager.sortAscending();
+    std::cout << "List after sorting in ascending order:" << std::endl;
+    listManager.displayList();
+
+    listManager.sortDescending();
+    std::cout << "List after sorting in descending order:" << std::endl;
+    listManager.displayList();
+
+    listManager.reverseList();
+    std::cout << "List after reversing:" << std::endl;
+    listManager.displayList();
+
+    return 0;
+}
