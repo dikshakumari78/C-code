@@ -1,0 +1,46 @@
+
+#include <iostream>
+#include <fstream>
+#include <regex>
+#include <string>
+using namespace std;
+void processLogFile(const string& inputFilePath, const string& outputFilePath, const string& pattern) {
+    std::ifstream inputFile(inputFilePath);
+    if (!inputFile.is_open()) {
+        cerr << "Error: Could not open input file: " << inputFilePath << endl;
+        return;
+    }
+
+    ofstream outputFile(outputFilePath);
+    if (!outputFile.is_open()) {
+        cerr << "Error: Could not open output file: " << outputFilePath << endl;
+        inputFile.close();
+        return;
+    }
+
+    regex regexPattern(pattern);
+    string line;
+    try {
+        while (getline(inputFile, line)) {
+            if (regex_search(line, regexPattern)) {
+                outputFile << line << endl;
+            }
+        }
+    } catch (const regex_error& e) {
+        cerr << "Regex error: " << e.what() << endl;
+    } catch (const std::exception& e) {
+        cerr << "Error: " << e.what() << endl;
+    }
+
+    inputFile.close();
+    outputFile.close();
+}
+
+int main() {
+    string inputFilePath = "log.txt";
+    string outputFilePath = "errors.txt"; 
+    string errorPattern = R"(ERROR)"; 
+    processLogFile(inputFilePath, outputFilePath, errorPattern);
+
+    return 0;
+}
