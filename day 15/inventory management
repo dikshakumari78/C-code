@@ -1,0 +1,130 @@
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <string>
+using namespace std;
+struct Item {
+    string name;
+    float price;
+    int quantity;
+    void save(std::ofstream& out) const {
+        size_t nameLength = name.size();
+        out.write(reinterpret_cast<const char*>(&nameLength), sizeof(nameLength));
+        out.write(name.c_str(), nameLength);
+        out.write(reinterpret_cast<const char*>(&price), sizeof(price));
+        out.write(reinterpret_cast<const char*>(&quantity), sizeof(quantity));
+    }
+    void load(ifstream& in) {
+        size_t nameLength;
+        in.read(reinterpret_cast<char*>(&nameLength), sizeof(nameLength));
+        name.resize(nameLength);
+        in.read(&name[0], nameLength);
+        in.read(reinterpret_cast<char*>(&price), sizeof(price));
+        in.read(reinterpret_cast<char*>(&quantity), sizeof(quantity));
+    }
+};
+
+void addItem(const string& filename) {
+    Item item;
+    cout << "Enter item name: ";
+    cin >> item.name;
+    cout << "Enter item price: ";
+    cin >> item.price;
+    cout << "Enter item quantity: ";
+    cin >> item.quantity;
+
+    ofstream outFile(filename, ios::binary | ios::app);
+    if (outFile.is_open()) {
+        item.save(outFile);
+        outFile.close();
+        cout << "Item added successfully.\n";
+    } else {
+        cerr << "Error opening file for writing.\n";
+    }
+}
+
+void displayItems(const std::string& filename) {
+    ifstream inFile(filename, ios::binary);
+    if (inFile.is_open()) {
+        Item item;
+        while (inFile.peek() != EOF) {
+            item.load(inFile);
+            cout << "Name: " << item.name << ", Price: " << item.price << ", Quantity: " << item.quantity << "\n";
+        }
+        inFile.close();
+    } else {
+        cerr << "Error opening file for reading.\n";
+    }
+}
+
+void updateQuantity(const string& filename, const string& itemName, int newQuantity) {
+    ifstream inFile(filename, ios::binary);
+    vector<Item> items;
+
+    if (inFile.is_open()) {
+        Item item;
+        while (inFile.peek() != EOF) {
+            item.load(inFile);
+            items.push_back(item);
+        }
+        inFile.close();
+
+        bool itemFound = false;
+        for (auto& i : items) {
+            if (i.name == itemName) {
+                i.quantity = newQuantity;
+                itemFound = true;
+                break;
+            }
+        }
+
+        if (itemFound) {
+            ofstream outFile(filename, ios::binary | ios::trunc);
+            if (outFile.is_open()) {
+                for (const auto& i : items) {
+                    i.save(outFile);
+                }
+                outFile.close();
+                cout << "Quantity updated successfully.\n";
+            } else {
+                cerr << "Error opening file for writing.\n";
+            }
+        } else {
+            cout << "Item not found.\n";
+        }
+    } else {
+        cerr << "Error opening file for reading.\n";
+    }
+}
+
+int main() {
+    string filename = "inventory.dat";
+    int choice;
+    string itemName;
+    int newQuantity;
+
+    while (true) {
+        cout << "1. Add Item\n2. Display Items\n3. Update Quantity\n4. Exit\nEnter your choice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1:
+                addItem(filename);
+                break;
+            case 2:
+                displayItems(filename);
+                break;
+            case 3:
+                cout << "Enter item name to update: ";
+                cin >> itemName;
+                cout << "Enter new quantity: ";
+                cin >> newQuantity;
+                updateQuantity(filename, itemName, newQuantity);
+                break;
+            case 4:
+                return 0;
+            default:
+                cout << "Invalid choice. Try again.\n";
+        }
+    }
+}
