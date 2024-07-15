@@ -1,0 +1,53 @@
+
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <functional>
+using namespace std;
+class LargeObject {
+public:
+    LargeObject(int id) : id_(id) {
+        cout << "Constructing LargeObject " << id_ << endl;
+    }
+    LargeObject(LargeObject&& other) noexcept : id_(other.id_) {
+        cout << "Moving LargeObject " << id_ << endl;
+        other.id_ = -1;  
+    }
+    
+    ~LargeObject() {
+        cout << "Destroying LargeObject " << id_ << endl;
+    }
+
+    void process() {
+        cout << "Processing LargeObject " << id_ << endl;
+    }
+    
+private:
+    int id_;
+};
+class LargeObjectContainer {
+public:
+    void addLargeObject(LargeObject&& obj) {
+        objects_.push_back(move(obj)); 
+    }
+    void forEach( function<void(LargeObject&)> func) {
+        for (auto& obj : objects_) {
+            func(obj);
+        }
+    }
+    
+private:
+    vector<LargeObject> objects_;
+};
+
+int main() {
+    LargeObjectContainer container;
+    container.addLargeObject(LargeObject(1));
+    container.addLargeObject(LargeObject(2));
+    container.addLargeObject(LargeObject(3));
+    container.forEach([](LargeObject& obj) {
+        obj.process();
+    });
+    
+    return 0;
+}
