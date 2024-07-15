@@ -1,0 +1,27 @@
+#include <iostream>
+#include <fstream>
+using namespace std;
+void copyImage(const std::string& inputFilePath, const std::string& outputFilePath) {
+    ifstream inputFile(inputFilePath, ios::binary);
+    if (!inputFile) {
+        cerr << "File not found: " << inputFilePath << endl;
+        return;
+    }
+    ofstream outputFile(outputFilePath, ios::binary);
+    if (!outputFile) {
+        cerr << "Could not open output file: " << outputFilePath << endl;
+        return;
+    }
+    outputFile << inputFile.rdbuf();
+
+    cout << "Image copied successfully from " << inputFilePath << " to " << outputFilePath << endl;
+}
+
+int main() {
+    string inputFilePath = "path/to/input/image.jpg";
+    string outputFilePath = "path/to/output/image_copy.jpg";
+
+    copyImage(inputFilePath, outputFilePath);
+
+    return 0;
+}
