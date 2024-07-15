@@ -1,0 +1,57 @@
+#include <iostream>
+#include <memory>
+#include <vector>
+#include <exception>
+using namespace std;
+class Animal {
+public:
+    virtual void makeSound() const = 0; 
+    virtual ~Animal() = default; 
+};
+class Dog : public Animal {
+public:
+    void makeSound() const override {
+        cout << "Woof!" << endl;
+    }
+};
+class Cat : public Animal {
+public:
+    void makeSound() const override {
+        cout << "Meow!" << endl;
+    }
+};
+class Cow : public Animal {
+public:
+    void makeSound() const override {
+        cout << "Moo!" << endl;
+    }
+};
+shared_ptr<Animal> createAnimal(const string& type) {
+    if (type == "dog") {
+        return make_shared<Dog>();
+    } else if (type == "cat") {
+        return make_shared<Cat>();
+    } else if (type == "cow") {
+        return make_shared<Cow>();
+    } else {
+        throw invalid_argument("Unknown animal type: " + type);
+    }
+}
+
+int main() {
+    vector<shared_ptr<Animal>> zoo;
+    try {
+        zoo.push_back(createAnimal("dog"));
+        zoo.push_back(createAnimal("cat"));
+        zoo.push_back(createAnimal("cow"));
+        zoo.push_back(createAnimal("unknown")); 
+    } catch (const std::exception& e) {
+        cerr << "Error: " << e.what() << endl;
+    }
+
+    for (const auto& animal : zoo) {
+        animal->makeSound();
+    }
+
+    return 0;
+}
