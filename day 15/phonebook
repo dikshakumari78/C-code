@@ -1,0 +1,105 @@
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <map>
+
+using namespace std;
+string encrypt(const string& str, int shift) {
+    string encrypted;
+    for (char c : str) {
+        if (c >= 'a' && c <= 'z') {
+            encrypted += 'a' + (c - 'a' + shift) % 26;
+        } else if (c >= 'A' && c <= 'Z') {
+            encrypted += 'A' + (c - 'A' + shift) % 26;
+        } else {
+            encrypted += c;
+        }
+    }
+    return encrypted;
+}
+string decrypt(const string& str, int shift) {
+    return encrypt(str, 26 - shift);
+}
+
+void addContact(map<string, string>& phonebook, const string& name, const string& number) {
+    phonebook[name] = number;
+}
+void searchContact(const map<string, string>& phonebook, const string& name) {
+    auto it = phonebook.find(name);
+    if (it != phonebook.end()) {
+        cout << "Phone number: " << it->second << endl;
+    } else {
+        cout << "Contact not found." << endl;
+    }
+}
+void savePhonebook(const map<string, string>& phonebook, const string& filename, int shift) {
+    ofstream file(filename);
+    if (file.is_open()) {
+        for (const auto& entry : phonebook) {
+            string encryptedName = encrypt(entry.first, shift);
+            string encryptedNumber = encrypt(entry.second, shift);
+            file << encryptedName << ":" << encryptedNumber << endl;
+        }
+        file.close();
+    } else {
+        cout << "Unable to open file." << endl;
+    }
+}
+void loadPhonebook(map<string, string>& phonebook, const string& filename, int shift) {
+    ifstream file(filename);
+    if (file.is_open()) {
+        string line;
+        while (getline(file, line)) {
+            size_t colonPos = line.find(':');
+            if (colonPos != string::npos) {
+                string encryptedName = line.substr(0, colonPos);
+                string encryptedNumber = line.substr(colonPos + 1);
+                string name = decrypt(encryptedName, shift);
+                string number = decrypt(encryptedNumber, shift);
+                phonebook[name] = number;
+            }
+        }
+        file.close();
+    } else {
+        cout << "Unable to open file." << endl;
+    }
+}
+
+int main() {
+    const string filename = "phonebook.txt";
+    const int shift = 3;
+
+    map<string, string> phonebook;
+
+    loadPhonebook(phonebook, filename, shift);
+
+    while (true) {
+        cout << "Phonebook Menu:" << endl;
+        cout << "1. Add contact" << endl;
+        cout << "2. Search contact" << endl;
+        cout << "3. Save and exit" << endl;
+        int choice;
+        cin >> choice;
+
+        if (choice == 1) {
+            string name, number;
+            cout << "Enter name: ";
+            cin >> name;
+            cout << "Enter phone number: ";
+            cin >> number;
+            addContact(phonebook, name, number);
+        } else if (choice == 2) {
+            string name;
+            cout << "Enter name: ";
+            cin >> name;
+            searchContact(phonebook, name);
+        } else if (choice == 3) {
+            savePhonebook(phonebook, filename, shift);
+            return 0;
+        } else {
+            cout << "Invalid choice." << endl;
+        }
+    }
+
+    return 0;
+}
