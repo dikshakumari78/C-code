@@ -1,0 +1,100 @@
+#include <iostream>
+#include <fstream>
+#include <string>
+using namespace std;
+const string FILENAME = "student_records.txt";
+
+void addStudentRecord() {
+    string name, studentID, marks;
+    
+    cout << "Enter student's name: ";
+    cin >> ws; 
+    getline(cin, name);
+    
+    cout << "Enter student's ID: ";
+    cin >> studentID;
+    
+    cout << "Enter student's marks: ";
+    cin >> marks;
+    
+    ofstream file(FILENAME, ios::app);
+    if (file.is_open()) {
+        file << name << "," << studentID << "," << marks << endl;
+        file.close();
+        cout << "Student record added successfully." << endl;
+    } else {
+        cout << "Unable to open file." << endl;
+    }
+}
+
+void displayAllRecords() {
+    ifstream file(FILENAME);
+    string line;
+    
+    if (file.is_open()) {
+        cout << "Student Records:" << endl;
+        while (getline(file, line)) {
+            cout << line << endl;
+        }
+        file.close();
+    } else {
+        cout << "No student records found." << endl;
+    }
+}
+
+void searchStudentByID() {
+    string studentID, line;
+    bool found = false;
+    
+    cout << "Enter student's ID to search: ";
+    cin >> studentID;
+    
+    ifstream file(FILENAME);
+    if (file.is_open()) {
+        while (getline(file, line)) {
+            size_t pos = line.find(",");
+            string id = line.substr(pos + 1, line.find(",", pos + 1) - pos - 1);
+            if (id == studentID) {
+                cout << "Student found: " << line << endl;
+                found = true;
+                break;
+            }
+        }
+        file.close();
+        if (!found) {
+            cout << "Student with ID " << studentID << " not found." << endl;
+        }
+    } else {
+        cout << "No student records found." << endl;
+    }
+}
+
+int main() {
+    int choice;
+    
+    while (true) {
+        cout << "1. Add Student Record" << endl;
+        cout << "2. Display All Records" << endl;
+        cout << "3. Search Student by ID" << endl;
+        cout << "4. Exit" << endl;
+        cout << "Enter your choice: ";
+        cin >> choice;
+        
+        switch (choice) {
+            case 1:
+                addStudentRecord();
+                break;
+            case 2:
+                displayAllRecords();
+                break;
+            case 3:
+                searchStudentByID();
+                break;
+            case 4:
+                cout << "Exiting..." << endl;
+                return 0;
+            default:
+                cout << "Invalid choice. Please try again." << endl;
+        }
+    }
+}
