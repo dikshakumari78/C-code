@@ -1,0 +1,76 @@
+#include <iostream>
+#include <map>
+#include <string>
+using namespace std;
+struct Contact {
+    string phone;
+    string email;
+};
+void addContact(map<string, Contact>& contacts) {
+    string name, phone, email;
+    cout << "Enter name: ";
+    getline(std::cin, name);
+    cout << "Enter phone number: ";
+    getline(std::cin, phone);
+    cout << "Enter email: ";
+    getline(cin, email);
+
+    contacts[name] = { phone, email };
+    cout << "Contact added successfully!\n";
+}
+void searchContact(const map<string, Contact>& contacts) {
+    string name;
+    cout << "Enter name to search: ";
+    getline(cin, name);
+
+    if (contacts.count(name) > 0) {
+        cout << "Name: " << name << "\n";
+        cout << "Phone: " << contacts.at(name).phone << "\n";
+        cout << "Email: " << contacts.at(name).email << "\n";
+    } else {
+        cout << "Contact not found.\n";
+    }
+}
+void displayContacts(const map<string, Contact>& contacts) {
+    if (contacts.empty()) {
+        cout << "No contacts stored.\n";
+    } else {
+        for (const pair<string, Contact>& entry : contacts) {
+            cout << "Name: " << entry.first << "\n";
+            cout << "Phone: " << entry.second.phone << "\n";
+            cout << "Email: " << entry.second.email << "\n";
+        }
+    }
+}
+
+int main() {
+    map<string, Contact> contacts;
+    int choice;
+
+    while (true) {
+        cout << "1. Add New Contact\n";
+        cout << "2. Search Contact\n";
+        cout << "3. Display All Contacts\n";
+        cout << "4. Exit\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+        cin.ignore(); 
+
+        switch (choice) {
+            case 1:
+                addContact(contacts);
+                break;
+            case 2:
+                searchContact(contacts);
+                break;
+            case 3:
+                displayContacts(contacts);
+                break;
+            case 4:
+                cout << "Exiting the program.\n";
+                return 0;
+            default:
+                cout << "Invalid choice. Please try again.\n";
+        }
+    }
+}
