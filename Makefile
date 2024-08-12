@@ -1,41 +1,26 @@
-# Makefile for compiling and running the server and client
-
-# Compiler
+# Define compiler and flags
 CXX = g++
+CXXFLAGS = -std=c++11 -Wall -Wextra
 
-# Compiler flags
-CXXFLAGS = -Wall -Wextra -std=c++11
+# Define targets and their dependencies
+all: client server
 
-# Source files
-SERVER_SRC = server.cpp
-CLIENT_SRC = client.cpp
-LOGGER_SRC = logger.h
+client: client.o
+	$(CXX) $(CXXFLAGS) -o client client.o
 
-# Executable files
-SERVER_EXEC = server
-CLIENT_EXEC = client
+server: server.o
+	$(CXX) $(CXXFLAGS) -o server server.o
 
-# Default target
-all: $(SERVER_EXEC) $(CLIENT_EXEC)
+# Compile the client source file
+client.o: client.cpp
+	$(CXX) $(CXXFLAGS) -c client.cpp
 
-# Compile server
-$(SERVER_EXEC): $(SERVER_SRC) $(LOGGER_SRC)
-	$(CXX) $(CXXFLAGS) -o $(SERVER_EXEC) $(SERVER_SRC)
+# Compile the server source file
+server.o: server.cpp
+	$(CXX) $(CXXFLAGS) -c server.cpp
 
-# Compile client
-$(CLIENT_EXEC): $(CLIENT_SRC)
-	$(CXX) $(CXXFLAGS) -o $(CLIENT_EXEC) $(CLIENT_SRC)
-
-# Clean up compiled files
+# Clean up build files
 clean:
-	rm -f $(SERVER_EXEC) $(CLIENT_EXEC)
+	rm -f *.o client server
 
-# Run server
-run-server: $(SERVER_EXEC)
-	./$(SERVER_EXEC)
-
-# Run client
-run-client: $(CLIENT_EXEC)
-	./$(CLIENT_EXEC)
-
-.PHONY: all clean run-server run-client
+.PHONY: all clean
