@@ -1,41 +1,51 @@
-# Makefile for compiling and running the server and client
-
-# Compiler
+# Define the compiler and flags
 CXX = g++
+CXXFLAGS = -std=c++17 -Wall -Wextra -O2
 
-# Compiler flags
-CXXFLAGS = -Wall -Wextra -std=c++11
+# Define source files and object files
+SERVER_SRC = server.cpp Logger.cpp
+CLIENT_SRC = client.cpp Logger.cpp
+SERVER_OBJ = $(SERVER_SRC:.cpp=.o)
+CLIENT_OBJ = $(CLIENT_SRC:.cpp=.o)
 
-# Source files
-SERVER_SRC = server.cpp
-CLIENT_SRC = client.cpp
-LOGGER_SRC = logger.h
-
-# Executable files
-SERVER_EXEC = server
-CLIENT_EXEC = client
+# Define the executables
+SERVER_EXE = server
+CLIENT_EXE = client
 
 # Default target
-all: $(SERVER_EXEC) $(CLIENT_EXEC)
+all: $(SERVER_EXE) $(CLIENT_EXE)
 
-# Compile server
-$(SERVER_EXEC): $(SERVER_SRC) $(LOGGER_SRC)
-	$(CXX) $(CXXFLAGS) -o $(SERVER_EXEC) $(SERVER_SRC)
+# Rule to build the server executable
+$(SERVER_EXE): $(SERVER_OBJ) 
+	$(CXX) $(CXXFLAGS) -o $@ $(SERVER_OBJ)
 
-# Compile client
-$(CLIENT_EXEC): $(CLIENT_SRC)
-	$(CXX) $(CXXFLAGS) -o $(CLIENT_EXEC) $(CLIENT_SRC)
+# Rule to build the client executable
+$(CLIENT_EXE): $(CLIENT_OBJ)
+	$(CXX) $(CXXFLAGS) -o $@ $(CLIENT_OBJ)
 
-# Clean up compiled files
+# Rule to build the object files for the server
+server.o: server.cpp Logger.h
+	$(CXX) $(CXXFLAGS) -c server.cpp
+
+# Rule to build the object files for the client
+client.o: client.cpp Logger.h
+	$(CXX) $(CXXFLAGS) -c client.cpp
+
+# Rule to build the object files for Logger
+Logger.o: Logger.cpp Logger.h
+	$(CXX) $(CXXFLAGS) -c Logger.cpp
+
+# Clean up build artifacts
 clean:
-	rm -f $(SERVER_EXEC) $(CLIENT_EXEC)
+	rm -f $(SERVER_OBJ) $(CLIENT_OBJ) $(SERVER_EXE) $(CLIENT_EXE)
 
 # Run server
-run-server: $(SERVER_EXEC)
-	./$(SERVER_EXEC)
+run-server: $(SERVER_EXE)
+	./$(SERVER_EXE)
 
 # Run client
-run-client: $(CLIENT_EXEC)
-	./$(CLIENT_EXEC)
+run-client: $(CLIENT_EXE)
+	./$(CLIENT_EXE)
 
-.PHONY: all clean run-server run-client
+# Ensure that the `clean` target runs before `run-server` or `run-client`
+.PHONY: clean all run-server run-client
