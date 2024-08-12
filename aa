@@ -1,6 +1,118 @@
-server.cpp: In function ‘void handleClient(int)’:
-server.cpp:30:13: error: ‘username’ was not declared in this scope; did you mean ‘rename’?
-   30 |         if (username == "user" && password == "password") {
-      |             ^~~~~~~~
-      |             rename
-make: *** [Makefile:20: server.o] Error 1
+#include <iostream>
+#include <fstream>
+#include <cstring>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <unistd.h>
+
+const int PORT = 8086;
+const int BUFFER_SIZE = 1024;
+
+void handleClient(int clientSocket) {
+    char buffer[BUFFER_SIZE];
+    int bytesRead;
+
+    // Variables for authentication
+    std::string username;
+    std::string password;
+
+    // Receive username
+    bytesRead = recv(clientSocket, buffer, BUFFER_SIZE, 0);
+    if (bytesRead > 0) {
+        buffer[bytesRead] = '\0';
+        username = buffer;
+        std::cout << "Username received: " << username << std::endl;
+    } else {
+        std::cerr << "Failed to receive username." << std::endl;
+        close(clientSocket);
+        return;
+    }
+
+    // Receive password
+    bytesRead = recv(clientSocket, buffer, BUFFER_SIZE, 0);
+    if (bytesRead > 0) {
+        buffer[bytesRead] = '\0';
+        password = buffer;
+        std::cout << "Password received: " << password << std::endl;
+
+        // Simple authentication check
+        if (username == "user" && password == "password") {
+            send(clientSocket, "AUTH_OK", strlen("AUTH_OK"), 0);
+        } else {
+            send(clientSocket, "AUTH_FAIL", strlen("AUTH_FAIL"), 0);
+            close(clientSocket);
+            return;
+        }
+    } else {
+        std::cerr << "Failed to receive password." << std::endl;
+        close(clientSocket);
+        return;
+    }
+
+    // Handle file or message
+    while ((bytesRead = recv(clientSocket, buffer, BUFFER_SIZE, 0)) > 0) {
+        buffer[bytesRead] = '\0';
+
+        if (strcmp(buffer, "FILE_START") == 0) {
+            std::ofstream file("received_file", std::ios::binary);
+            while (true) {
+                bytesRead = recv(clientSocket, buffer, BUFFER_SIZE, 0);
+                if (bytesRead <= 0 || strcmp(buffer, "FILE_END") == 0) break;
+                file.write(buffer, bytesRead);
+            }
+            file.close();
+            send(clientSocket, "File received", strlen("File received"), 0);
+        } else if (strcmp(buffer, "FILE_END") == 0) {
+            send(clientSocket, "File received", strlen("File received"), 0);
+        } else {
+            std::cout << "Received message: " << buffer << std::endl;
+            send(clientSocket, "Message received", strlen("Message received"), 0);
+        }
+    }
+
+    close(clientSocket);
+}
+
+int main() {
+    int serverSocket, clientSocket;
+    struct sockaddr_in serverAddr, clientAddr;
+    socklen_t clientAddrLen = sizeof(clientAddr);
+
+    // Create socket
+    serverSocket = socket(AF_INET, SOCK_STREAM, 0);
+    if (serverSocket < 0) {
+        std::cerr << "Socket creation error." << std::endl;
+        return -1;
+    }
+
+    // Set up the server address
+    serverAddr.sin_family = AF_INET;
+    serverAddr.sin_addr.s_addr = INADDR_ANY;
+    serverAddr.sin_port = htons(PORT);
+
+    // Bind the socket
+    if (bind(serverSocket, (struct sockaddr*)&serverAddr, sizeof(serverAddr)) < 0) {
+        std::cerr << "Bind error." << std::endl;
+        close(serverSocket);
+        return -1;
+    }
+
+    // Listen for incoming connections
+    if (listen(serverSocket, 3) < 0) {
+        std::cerr << "Listen error." << std::endl;
+        close(serverSocket);
+        return -1;
+    }
+
+    std::cout << "Server listening on port " << PORT << std::endl;
+
+    // Accept connections and handle them
+    while ((clientSocket = accept(serverSocket, (struct sockaddr*)&clientAddr, &clientAddrLen)) >= 0) {
+        std::cout << "Client connected." << std::endl;
+        handleClient(clientSocket);
+    }
+
+    std::cerr << "Accept error." << std::endl;
+    close(serverSocket);
+    return -1;
+}
