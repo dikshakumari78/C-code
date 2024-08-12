@@ -1,51 +1,26 @@
-# Define the compiler and flags
+# Define compiler and flags
 CXX = g++
-CXXFLAGS = -std=c++17 -Wall -Wextra -O2
+CXXFLAGS = -std=c++11 -Wall -Wextra
 
-# Define source files and object files
-SERVER_SRC = server.cpp Logger.cpp
-CLIENT_SRC = client.cpp Logger.cpp
-SERVER_OBJ = $(SERVER_SRC:.cpp=.o)
-CLIENT_OBJ = $(CLIENT_SRC:.cpp=.o)
+# Define targets and their dependencies
+all: client server
 
-# Define the executables
-SERVER_EXE = server
-CLIENT_EXE = client
+client: client.o
+	$(CXX) $(CXXFLAGS) -o client client.o
 
-# Default target
-all: $(SERVER_EXE) $(CLIENT_EXE)
+server: server.o
+	$(CXX) $(CXXFLAGS) -o server server.o
 
-# Rule to build the server executable
-$(SERVER_EXE): $(SERVER_OBJ) 
-	$(CXX) $(CXXFLAGS) -o $@ $(SERVER_OBJ)
-
-# Rule to build the client executable
-$(CLIENT_EXE): $(CLIENT_OBJ)
-	$(CXX) $(CXXFLAGS) -o $@ $(CLIENT_OBJ)
-
-# Rule to build the object files for the server
-server.o: server.cpp Logger.h
-	$(CXX) $(CXXFLAGS) -c server.cpp
-
-# Rule to build the object files for the client
-client.o: client.cpp Logger.h
+# Compile the client source file
+client.o: client.cpp
 	$(CXX) $(CXXFLAGS) -c client.cpp
 
-# Rule to build the object files for Logger
-Logger.o: Logger.cpp Logger.h
-	$(CXX) $(CXXFLAGS) -c Logger.cpp
+# Compile the server source file
+server.o: server.cpp
+	$(CXX) $(CXXFLAGS) -c server.cpp
 
-# Clean up build artifacts
+# Clean up build files
 clean:
-	rm -f $(SERVER_OBJ) $(CLIENT_OBJ) $(SERVER_EXE) $(CLIENT_EXE)
+	rm -f *.o client server
 
-# Run server
-run-server: $(SERVER_EXE)
-	./$(SERVER_EXE)
-
-# Run client
-run-client: $(CLIENT_EXE)
-	./$(CLIENT_EXE)
-
-# Ensure that the `clean` target runs before `run-server` or `run-client`
-.PHONY: clean all run-server run-client
+.PHONY: all clean
