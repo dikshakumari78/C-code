@@ -1,0 +1,6 @@
+server.cpp: In function ‘void handleClient(int)’:
+server.cpp:30:13: error: ‘username’ was not declared in this scope; did you mean ‘rename’?
+   30 |         if (username == "user" && password == "password") {
+      |             ^~~~~~~~
+      |             rename
+make: *** [Makefile:20: server.o] Error 1
