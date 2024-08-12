@@ -3,138 +3,109 @@
 #include <cstring>
 #include <sys/socket.h>
 #include <netinet/in.h>
-#include <arpa/inet.h>
 #include <unistd.h>
 
 const int PORT = 8086;
 const int BUFFER_SIZE = 1024;
 
-void sendFile(int socket, const std::string& filePath) {
-    std::ifstream file(filePath, std::ios::binary);
-    if (!file) {
-        std::cerr << "Error opening file." << std::endl;
-        return;
-    }
-
-    // Extract the filename from the file path
-    std::string filename = filePath.substr(filePath.find_last_of("/\\") + 1);
-
-    // Send the filename
-    send(socket, filename.c_str(), filename.size(), 0);
-    usleep(100); // Small delay to ensure filename is sent before FILE_START
-
+void handleClient(int clientSocket) {
     char buffer[BUFFER_SIZE];
-    // Notify server about file transfer
-    send(socket, "FILE_START", strlen("FILE_START"), 0);
+    int bytesRead;
 
-    // Send file content
-    while (file.read(buffer, BUFFER_SIZE)) {
-        send(socket, buffer, file.gcount(), 0);
-    }
-    send(socket, buffer, file.gcount(), 0);  // Send remaining bytes
-
-    // Notify server end of file transfer
-    send(socket, "FILE_END", strlen("FILE_END"), 0);
-
-    // Receive acknowledgment
-    int bytesRead = recv(socket, buffer, BUFFER_SIZE, 0);
+    // Authentication
+    bytesRead = recv(clientSocket, buffer, BUFFER_SIZE, 0);
     if (bytesRead > 0) {
         buffer[bytesRead] = '\0';
-        std::cout << "Server: " << buffer << std::endl;
+        std::string username(buffer);
+        std::cout << "Username: " << username << std::endl;
     }
 
-    std::cout << "File sent successfully." << std::endl;
-}
-
-void sendMessage(int socket, const std::string& message) {
-    send(socket, message.c_str(), message.size(), 0);
-    std::cout << "Message sent: " << message << std::endl;
-
-    char buffer[BUFFER_SIZE];
-    int bytesRead = recv(socket, buffer, BUFFER_SIZE, 0);
+    bytesRead = recv(clientSocket, buffer, BUFFER_SIZE, 0);
     if (bytesRead > 0) {
         buffer[bytesRead] = '\0';
-        std::cout << "Server: " << buffer << std::endl;
+        std::string password(buffer);
+        std::cout << "Password: " << password << std::endl;
+
+        // Simple authentication check
+        if (username == "user" && password == "password") {
+            send(clientSocket, "AUTH_OK", strlen("AUTH_OK"), 0);
+        } else {
+            send(clientSocket, "AUTH_FAIL", strlen("AUTH_FAIL"), 0);
+            close(clientSocket);
+            return;
+        }
     }
+
+    // Handle file or message
+    while ((bytesRead = recv(clientSocket, buffer, BUFFER_SIZE, 0)) > 0) {
+        buffer[bytesRead] = '\0';
+
+        if (strcmp(buffer, "FILE_START") == 0) {
+            std::ofstream file("received_file", std::ios::binary);
+            while (true) {
+                bytesRead = recv(clientSocket, buffer, BUFFER_SIZE, 0);
+                if (bytesRead <= 0) break;
+                if (strcmp(buffer, "FILE_END") == 0) break;
+                file.write(buffer, bytesRead);
+            }
+            file.close();
+            send(clientSocket, "File received", strlen("File received"), 0);
+        } else if (strcmp(buffer, "FILE_END") == 0) {
+            send(clientSocket, "File received", strlen("File received"), 0);
+        } else {
+            std::cout << "Received message: " << buffer << std::endl;
+            send(clientSocket, "Message received", strlen("Message received"), 0);
+        }
+    }
+
+    close(clientSocket);
 }
 
 int main() {
-    int socketFd;
-    struct sockaddr_in serverAddr;
-    std::string input;
+    int serverSocket, clientSocket;
+    struct sockaddr_in serverAddr, clientAddr;
+    socklen_t clientAddrLen = sizeof(clientAddr);
 
     // Create socket
-    socketFd = socket(AF_INET, SOCK_STREAM, 0);
-    if (socketFd < 0) {
+    serverSocket = socket(AF_INET, SOCK_STREAM, 0);
+    if (serverSocket < 0) {
         std::cerr << "Socket creation error." << std::endl;
         return -1;
     }
 
-    // Connect to server
+    // Bind socket to address
     serverAddr.sin_family = AF_INET;
+    serverAddr.sin_addr.s_addr = INADDR_ANY;
     serverAddr.sin_port = htons(PORT);
-    if (inet_pton(AF_INET, "127.0.0.1", &serverAddr.sin_addr) <= 0) { // Use appropriate IP address
-        std::cerr << "Invalid address/Address not supported." << std::endl;
+    if (bind(serverSocket, (struct sockaddr*)&serverAddr, sizeof(serverAddr)) < 0) {
+        std::cerr << "Bind failed." << std::endl;
+        close(serverSocket);
         return -1;
     }
 
-    if (connect(socketFd, (struct sockaddr*)&serverAddr, sizeof(serverAddr)) < 0) {
-        std::cerr << "Connection error." << std::endl;
+    // Listen for connections
+    if (listen(serverSocket, 5) < 0) {
+        std::cerr << "Listen failed." << std::endl;
+        close(serverSocket);
         return -1;
     }
 
-    // Authentication
-    std::string username, password;
-    std::cout << "Enter username: ";
-    std::getline(std::cin, username);
-    std::cout << "Enter password: ";
-    std::getline(std::cin, password);
+    std::cout << "Server listening on port " << PORT << std::endl;
 
-    // Send username and password
-    send(socketFd, username.c_str(), username.size(), 0);
-    usleep(100); // Small delay to ensure username is sent before password
-    send(socketFd, password.c_str(), password.size(), 0);
-
-    // Receive authentication response
-    char buffer[BUFFER_SIZE];
-    int bytesRead = recv(socketFd, buffer, BUFFER_SIZE, 0);
-    if (bytesRead > 0) {
-        buffer[bytesRead] = '\0';
-        if (strcmp(buffer, "AUTH_OK") != 0) {
-            std::cerr << "Authentication failed." << std::endl;
-            close(socketFd);
-            return -1;
-        }
-    } else {
-        std::cerr << "Error receiving authentication response." << std::endl;
-        close(socketFd);
-        return -1;
-    }
-
-    // Loop for sending messages or files
     while (true) {
-        std::cout << "Enter 'file' to send a file, 'message' to send a message, or 'exit' to quit: ";
-        std::cin >> input;
-        std::cin.ignore();  // Ignore the newline character after input
-
-        if (input == "file") {
-            std::string filePath;
-            std::cout << "Enter file path: ";
-            std::getline(std::cin, filePath);
-            sendFile(socketFd, filePath);
-        } else if (input == "message") {
-            std::string message;
-            std::cout << "Enter message: ";
-            std::getline(std::cin, message);
-            sendMessage(socketFd, message);
-        } else if (input == "exit") {
-            std::cout << "Exiting..." << std::endl;
-            break;
-        } else {
-            std::cerr << "Invalid option." << std::endl;
+        // Accept connection
+        clientSocket = accept(serverSocket, (struct sockaddr*)&clientAddr, &clientAddrLen);
+        if (clientSocket < 0) {
+            std::cerr << "Connection accept error." << std::endl;
+            continue;
         }
+
+        std::cout << "Client connected." << std::endl;
+
+        // Handle client
+        handleClient(clientSocket);
     }
 
-    close(socketFd);
+    close(serverSocket);
     return 0;
 }
