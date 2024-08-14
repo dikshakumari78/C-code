@@ -1,36 +1,40 @@
-#include "DynamicArray.h"
+#include "Stack.h"
+#include <iostream>
+#include <string>
 
 int main() {
-    try {
-        DynamicArray<int> arr;
-        
-        // Insert elements
-        arr.insert(1);
-        arr.insert(2);
-        arr.insert(3);
-        
-        std::cout << "Array contents after inserts: ";
-        for (size_t i = 0; i < arr.getSize(); ++i) {
-            std::cout << arr[i] << " ";
-        }
-        std::cout << std::endl;
+    Stack<int> intStack;
+    intStack.push(1);
+    intStack.push(2);
+    intStack.push(3);
 
-        // Remove an element
-        arr.remove(1);
-        
-        std::cout << "Array contents after removal: ";
-        for (size_t i = 0; i < arr.getSize(); ++i) {
-            std::cout << arr[i] << " ";
-        }
-        std::cout << std::endl;
-
-        // Clear the array
-        arr.clear();
-        
-        std::cout << "Array size after clearing: " << arr.getSize() << std::endl;
-    } catch (const std::exception& e) {
-        std::cerr << e.what() << std::endl;
+    std::cout << "Integer Stack:\n";
+    while (!intStack.isEmpty()) {
+        std::cout << "Top: " << intStack.peek() << std::endl;
+        intStack.pop();
     }
-    
+
+    // Stack for floats
+    Stack<float> floatStack;
+    floatStack.push(1.1f);
+    floatStack.push(2.2f);
+    floatStack.push(3.3f);
+
+    std::cout << "Float Stack:\n";
+    while (!floatStack.isEmpty()) {
+        std::cout << "Top: " << floatStack.peek() << std::endl;
+        floatStack.pop();
+    }
+    Stack<std::string> stringStack;
+    stringStack.push("Hello");
+    stringStack.push("World");
+    stringStack.push("!");
+
+    std::cout << "String Stack:\n";
+    while (!stringStack.isEmpty()) {
+        std::cout << "Top: " << stringStack.peek() << std::endl;
+        stringStack.pop();
+    }
+
     return 0;
 }
