@@ -1,0 +1,70 @@
+#include "Stack.h"
+
+template<typename T>
+Stack<T>::Stack(size_t initial_capacity)
+    : capacity(initial_capacity), size(0) {
+    array = new T[capacity];
+}
+
+template<typename T>
+Stack<T>::~Stack() {
+    delete[] array;
+}
+
+template<typename T>
+void Stack<T>::resize(size_t new_capacity) {
+    T* new_array = new T[new_capacity];
+    for (size_t i = 0; i < size; ++i) {
+        new_array[i] = array[i];
+    }
+    delete[] array;
+    array = new_array;
+    capacity = new_capacity;
+}
+
+template<typename T>
+void Stack<T>::push(const T& value) {
+    if (size >= capacity) {
+        resize(capacity * 2);
+    }
+    array[size++] = value;
+}
+
+template<typename T>
+void Stack<T>::pop() {
+    if (isEmpty()) {
+        throw std::out_of_range("Stack is empty");
+    }
+    --size;
+}
+
+template<typename T>
+T& Stack<T>::peek() {
+    if (isEmpty()) {
+        throw std::out_of_range("Stack is empty");
+    }
+    return array[size - 1];
+}
+
+template<typename T>
+const T& Stack<T>::peek() const {
+    if (isEmpty()) {
+        throw std::out_of_range("Stack is empty");
+    }
+    return array[size - 1];
+}
+
+template<typename T>
+bool Stack<T>::isEmpty() const {
+    return size == 0;
+}
+
+template<typename T>
+size_t Stack<T>::getSize() const {
+    return size;
+}
+
+template<typename T>
+size_t Stack<T>::getCapacity() const {
+    return capacity;
+}
